@@ -1,0 +1,46 @@
+<mat-list>
+  <h3 matSubheader>Ustawienia</h3>
+
+  <mat-list-item>
+    <mat-icon matListIcon>sync</mat-icon>
+    <p matLine>Synchronizacja </p>
+  </mat-list-item>
+
+  <mat-list-item>
+    <mat-form-field matLine>
+      <mat-label>Interwał</mat-label>
+      <mat-select [(value)]="selected">
+          <mat-option value="900000">15 minut</mat-option>
+          <mat-option value="1800000">30 minut</mat-option>
+          <mat-option value="28800000">8 godzin</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-list-item>
+
+  <mat-list-item>
+    <p matLine>Włacz / wyłącz </p> <mat-slide-toggle></mat-slide-toggle>
+  </mat-list-item>
+
+  <mat-divider></mat-divider>
+
+  <mat-list-item>
+    <mat-icon matListIcon>color_lens</mat-icon>
+    <p matLine>Motyw </p>
+  </mat-list-item>
+
+  <mat-list-item>
+      <mat-form-field matLine>
+        <mat-label>Motyw</mat-label>
+        <mat-select [(value)]="selected">
+            <mat-option value="kn-purple-13">Ciemny fiolet</mat-option>
+            <mat-option value="kn-red">Ciemny czerwony</mat-option>
+            <mat-option value="kn-green-1">Ciemny zielony</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+
+  
+</mat-list>
+

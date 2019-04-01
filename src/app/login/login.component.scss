@@ -1,0 +1,35 @@
+@import '~@angular/material/theming';
+
+@mixin login-theme($theme) {
+    $accent: map-get($theme, accent);
+    $primary: map-get($theme, primary);
+    $background: map-get($theme, background);
+
+    .mat-card {
+        background-color: mat-color($primary, 900) !important;
+        color: mat-color($accent, 200) !important;
+        margin: 16px;
+    }
+    
+    .mat-button {
+        margin-left: 8px !important;
+        margin-bottom: 8px !important;
+        background-color: mat-color($accent, 800) !important;
+    }
+
+    .mat-card-avatar > i {
+        font-size: 3.5em;
+    }
+
+    .mat-form-field {
+        width: 100%;
+    }
+
+    .mat-input-element {
+        caret-color: mat-color($accent, 200) !important;
+    }
+
+    .mat-focused {
+        color: mat-color($accent, 200) !important;
+    }
+}

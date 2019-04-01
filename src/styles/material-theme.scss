@@ -1,0 +1,87 @@
+@import '~@angular/material/theming';
+@import './component-themes';
+@import './palets';
+
+@include mat-core();
+
+// Our dark theme
+.dark-theme {
+  $dark-primary: mat-palette($black);
+  $dark-accent: mat-palette($gray);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}
+
+.kn-blue {
+  $dark-primary: mat-palette($kn7a);
+  $dark-accent: mat-palette($kn7b);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}
+
+
+.blackngray {
+  $dark-primary: mat-palette($black);
+  $dark-accent: mat-palette($gray);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}
+
+.kn-red {
+  $dark-primary: mat-palette($kn18a);
+  $dark-accent: mat-palette($kn19b);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}
+
+.kn-green-1 {
+  $dark-primary: mat-palette($kn20a);
+  $dark-accent: mat-palette($kn21b);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}
+
+.kn-green-2 {
+  $dark-primary: mat-palette($kn20a);
+  $dark-accent: mat-palette($kn20b);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}
+
+.kn-green-3 {
+  $dark-primary: mat-palette($kn21a);
+  $dark-accent: mat-palette($kn21b);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}
+
+.kn-purple-13 {
+  $dark-primary: mat-palette($kn13a);
+  $dark-accent: mat-palette($kn13b);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}

@@ -1,0 +1,36 @@
+@import '~@angular/material/theming';
+
+@mixin plan-theme($theme) {
+    $accent: map-get($theme, accent);
+    $primary: map-get($theme, primary);
+
+    .mat-subheader {
+        background-color: mat-color($accent, 800) !important;
+        color: mat-color($primary, 900) !important;
+        @include mat-elevation(2);
+        z-index: 2;
+        width: 100%;
+        position: sticky;
+        top: 0px;
+        font-size: 2em !important;
+    }
+
+    .mat-list-item {
+        background-color: mat-color($primary, 900) !important;
+        color: mat-color($accent, 200) !important;
+    }
+
+    .jp2item {
+        background-color: rgba(mat-color($primary, 900), 0.8) !important;
+    }
+
+    .jp2 {
+        background-image: url('http://budziszm.pro-linuxpl.com/jp2k.gif');
+        background-size: contain;
+    }
+
+    .mat-list > article:not(:first-child) {
+        margin-top: 8px;
+    }
+
+}

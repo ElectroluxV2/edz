@@ -1,0 +1,38 @@
+
+  <mat-card>
+    <mat-card-header>
+        <div mat-card-avatar><i class="material-icons">fingerprint</i></div>
+        <mat-card-title>Logowanie</mat-card-title>
+        <mat-card-subtitle>PMGdynia</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <mat-form-field>
+        <input [disabled]="loading" required matInput placeholder="Podaj login" [(ngModel)]="login">
+        <mat-error *ngIf="loginError">
+            Podaj prawidłowy login
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input [disabled]="loading" required matInput placeholder="Wprowadź swoje hasło" [type]="hide ? 'text' : 'password'" [(ngModel)]="password">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="passwordError">
+            Podaj prawidłowe hasło
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input [disabled]="loading" matInput placeholder="Kod dostępu" [(ngModel)]="code">
+        <mat-error *ngIf="codeError">
+            Podany kod nie istnieje
+        </mat-error>
+      </mat-form-field>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button [disabled]="loading" mat-button (click)="tryLogin();">Zaloguj</button>
+    </mat-card-actions>
+  </mat-card>

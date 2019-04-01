@@ -1,0 +1,64 @@
+@import '~@angular/material/theming';
+@import '~material-bottom-nav';
+@mixin nav-theme($theme) {
+    $accent: map-get($theme, accent);
+    $primary: map-get($theme, primary);
+
+    .bottom-nav {
+        @include bottom-nav($background-color: mat-color($accent, 800) , $active-color: mat-color($primary, 200), $inactive-color: mat-color($primary, 600), $hide-inactive-labels: false);
+        border-color: rgba(0, 0, 0, 0.2);
+        height: 3.2em;
+    }
+
+   
+    .app-frame {
+        background-color: mat-color($primary, 900) !important;
+        height: 100vh;
+    }
+
+    .mat-menu-panel, .mat-select-panel, .mat-form-field-underline {
+        background-color: mat-color($accent, 800) !important;
+    }
+
+    [class="mat-slide-toggle mat-accent"] > label > div {
+        background-color: mat-color($accent, 200) !important;
+    }
+
+    .mat-slide-toggle-thumb {
+        background-color: mat-color($accent, 700) !important;
+    }
+
+    .mat-select-arrow, .mat-select-value-text, .mat-form-field-label {
+        color: mat-color($accent, 200) !important;
+    }
+
+    .mat-option {
+        color: mat-color($primary, 100) !important;
+    }
+
+    .mat-option.mat-selected:not(.mat-option-disabled) {
+        color: mat-color($primary, 200) !important;
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-animation: autofill 0s forwards;
+        animation: autofill 0s forwards;
+    }
+    
+    @keyframes autofill {
+        100% {
+            background: transparent;
+            color: inherit;
+        }
+    }
+    
+    @-webkit-keyframes autofill {
+        100% {
+            background: transparent;
+            color: inherit;
+        }
+    }
+}
