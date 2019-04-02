@@ -44,7 +44,7 @@ export class AppComponent {
     this.update.checkForUpdates();
 
     if (this.userService.isLoggedIn()) {
-      this.router.navigate(['settings']);
+      this.router.navigate(['plan']);
     } else {
       this.router.navigate(['login']);
     }

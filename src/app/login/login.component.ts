@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UserService, UserCredentials } from '../services/user.service';
-import { HttpClient } from '@angular/common/http';
-import { Plan } from '../plan/plan';
+import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -23,9 +21,7 @@ export class LoginComponent implements OnInit {
   loading = false;
 
 
-  constructor(private userService: UserService, private router: Router) {
-    console.log('login component');
-  }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit() {
 

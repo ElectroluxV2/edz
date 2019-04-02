@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Md5 } from 'ts-md5/dist/md5';
+import { Observable, of } from 'rxjs';
 
 export interface UserSettings {
   syncInterval: number;
@@ -66,29 +67,51 @@ export class User {
 })
 
 export class UserService {
-
   users: User[] = [];
   loginUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/login';
   planUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/plan';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.loadSavedUsers();
+  }
+
+  getUsers(): Observable<User[]> {
+    return of(this.users);
+  }
 
   loadSavedUsers() {
     // Load saved users
     const keys = Object.keys(localStorage);
     for (const key of keys) {
       if (key.includes('user-')) {
-        const user: User = JSON.parse(localStorage.getItem(key));
-        console.log(user);
+        const saved: User = JSON.parse(localStorage.getItem(key));
 
-        this.users.push(user);
+        // Use constructor
+        const user: User = new User(
+          saved.login,
+          saved.password,
+          saved.authentication,
+          saved.settings,
+          saved.data
+        );
+
+        let add = true;
+        for (const u of this.users) {
+          if (u.login === user.login) {
+            add = false;
+            break;
+          }
+        }
+
+        if (add) {
+          this.users.push(user);
+        }
       }
     }
   }
 
   // Return true if any user is logged in
   isLoggedIn() {
-    // Load users
-    this.loadSavedUsers();
+    this.loadSavedUsers(); // Can run in multiple instances
     return (this.users.length) ? true : false;
   }
 
@@ -121,10 +144,8 @@ export class UserService {
         }
         // Create new user
         const newUser: User = new User(login, md5pass, btoa(login + ':' + code));
-
         // Save
         newUser.save();
-
         // Add user to array
         this.users.push(newUser);
         // Get data for all users

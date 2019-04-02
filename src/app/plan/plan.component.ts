@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Plan } from './plan';
-import { UserService } from '../services/user.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { UserService, Plan, User } from '../services/user.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { interval } from 'rxjs';
+import { interval, Subscription, Observable } from 'rxjs';
 import { AppComponent } from '../app.component';
 
 
@@ -13,40 +12,41 @@ import { AppComponent } from '../app.component';
   styleUrls: ['./plan.component.scss']
 })
 
-export class PlanComponent implements OnInit{
-  plan: Plan;
+export class PlanComponent implements OnInit, OnDestroy {
   jp2mode = false;
+  users: Observable<User[]>;
 
   jp2() {
+     // Czas
+     const hours = new Date().getHours();
+     const minutes = new Date().getMinutes();
+
+     if ((hours === 21) && (minutes === 37)) {
+       this.jp2mode = true;
+       this.jp2();
+     } else {
+       this.jp2mode = false;
+     }
+     setTimeout(() => { this.jp2(); }, 1500);
+  }
+
+  jp22() {
     const minutes = new Date().getMinutes();
     if (minutes === 37) {
       this.appComponent.next();
-      setTimeout(() => { this.jp2(); }, 20);
+      setTimeout(() => { this.jp22(); }, 20);
     }
   }
 
-  constructor(private userService: UserService, private router: Router, private appComponent: AppComponent) {
-    this.getPlanForCurrentUser();
-
-    // Co sekundę
-    interval(1000).subscribe(() => {
-
-      // Czas
-      const hours = new Date().getHours();
-      const minutes = new Date().getMinutes();
-
-      if ((hours === 21) && (minutes === 37)) {
-        this.jp2mode = true;
-        this.jp2();
-      } else {
-        this.jp2mode = false;
-      }
-    });
+  constructor(private userService: UserService, private appComponent: AppComponent) {
+    this.users = this.userService.getUsers().pipe();
   }
 
-  getPlanForCurrentUser() {
-    this.plan = this.userService.users[0].data.plan;
+  ngOnInit(): void {
+
   }
 
-  ngOnInit(): void { }
+  ngOnDestroy(): void {
+
+  }
 }

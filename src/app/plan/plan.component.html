@@ -1,65 +1,66 @@
-<div *ngIf="!plan">
-  <h1>Trwa ładowanie</h1>
-  <mat-spinner></mat-spinner>
-</div>
 
-<div *ngIf="plan" style="padding-bottom: 3.2em">
-  <mat-list [ngClass]="{'jp2': jp2mode}">
+<div *ngFor="let user of users | async">
 
-    <article>
-        <h2 mat-subheader>Poniedziałek</h2>
-        <div *ngFor="let lesson of plan.monday; index as i">
-            <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
-                <h4 matLine>{{lesson.name}}</h4>
-                <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
-                <mat-divider></mat-divider>
-            </mat-list-item>
-        </div>
-    </article>
+    <mat-list [ngClass]="{'jp2': jp2mode}">
 
-    <article>
-        <h2 mat-subheader>Wtorek</h2>
-        <div *ngFor="let lesson of plan.tuesday; index as i">
-            <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
-                <h4 matLine>{{lesson.name}}</h4>
-                <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
-                <mat-divider></mat-divider>
-            </mat-list-item>
-        </div>
-    </article>
+        <article *ngIf="(users | async).length > 1">
+            <h1 mat-subheader>Plan dla {{user.login}}</h1>
+        </article>
 
-    <article>
-        <h2 mat-subheader>Środa</h2>
-        <div *ngFor="let lesson of plan.wednesday; index as i">
-            <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
-                <h4 matLine>{{lesson.name}}</h4>
-                <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
-                <mat-divider></mat-divider>
-            </mat-list-item>
-        </div>
-    </article>
+        <article>
+            <h2 mat-subheader>Poniedziałek</h2>
+            <div *ngFor="let lesson of user.data.plan.monday; index as i">
+                <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
+                    <h4 matLine>{{lesson.name}}</h4>
+                    <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </div>
+        </article>
 
-    <article>
-        <h2 mat-subheader>Czwartek</h2>
-        <div *ngFor="let lesson of plan.thursday; index as i">
-            <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
-                <h4 matLine>{{lesson.name}}</h4>
-                <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
-                <mat-divider></mat-divider>
-            </mat-list-item>
-        </div>
-    </article>
+        <article>
+            <h2 mat-subheader>Wtorek</h2>
+            <div *ngFor="let lesson of user.data.plan.tuesday; index as i">
+                <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
+                    <h4 matLine>{{lesson.name}}</h4>
+                    <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </div>
+        </article>
 
-    <article>
-        <h2 mat-subheader>Piątek</h2>
-        <div *ngFor="let lesson of plan.friday; index as i">
-            <mat-list-item matRipple *ngIf="!lesson.empty">
-                <h4 matLine>{{lesson.name}}</h4>
-                <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
-                <mat-divider></mat-divider>
-            </mat-list-item>
-        </div>
-    </article>
+        <article>
+            <h2 mat-subheader>Środa</h2>
+            <div *ngFor="let lesson of user.data.plan.wednesday; index as i">
+                <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
+                    <h4 matLine>{{lesson.name}}</h4>
+                    <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </div>
+        </article>
 
-  </mat-list>
+        <article>
+            <h2 mat-subheader>Czwartek</h2>
+            <div *ngFor="let lesson of user.data.plan.thursday; index as i">
+                <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
+                    <h4 matLine>{{lesson.name}}</h4>
+                    <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </div>
+        </article>
+
+        <article>
+            <h2 mat-subheader>Piątek</h2>
+            <div *ngFor="let lesson of user.data.plan.friday; index as i">
+                <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
+                    <h4 matLine>{{lesson.name}}</h4>
+                    <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </div>
+        </article>
+
+    </mat-list>
 </div>

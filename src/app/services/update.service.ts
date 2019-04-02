@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { interval } from 'rxjs';
-import { UserService } from './user.service';
+import { UserService, User } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,21 +9,24 @@ import { UserService } from './user.service';
 export class UpdateService {
 
   constructor(private swUpdate: SwUpdate, private userService: UserService) {
-    swUpdate.checkForUpdate();
-    if (swUpdate.isEnabled) {
-      interval(6 * 60 * 60).subscribe(() => swUpdate.checkForUpdate()
-        .then(() => console.log('checking for updates')));
-    }
+    this.checkForUpdates();
   }
 
   public checkForUpdates(): void {
+    console.log('Checking for updates');
+
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.checkForUpdate();
+      this.swUpdate.available.subscribe(event => this.promptUser());
+    }
+
     if (this.userService.isLoggedIn()) {
       this.userService.synchronization();
     } else {
       console.warn('Can\'t download updates while user isn\'t logged in');
     }
 
-    this.swUpdate.available.subscribe(event => this.promptUser());
+    setTimeout(() => { this.checkForUpdates(); }, 1000 * 60 * 5);
   }
 
   private promptUser(): void {

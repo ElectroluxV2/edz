@@ -5,6 +5,7 @@
 <div class="app-frame">
     <router-outlet></router-outlet>
 
+    <div style="height: 3.2em"></div>
     <nav class="bottom-nav" *ngIf="isLoggedIn()">
         <a disabled matRipple class="bottom-nav__action" [ngClass]="{'bottom-nav__action--active': 1==0}">
             <svg class="bottom-nav__icon" viewBox="0 0 25 24">
