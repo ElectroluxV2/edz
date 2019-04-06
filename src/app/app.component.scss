@@ -5,15 +5,52 @@
     $primary: map-get($theme, primary);
 
     .bottom-nav {
-        @include bottom-nav($background-color: mat-color($accent, 800) , $active-color: mat-color($primary, 200), $inactive-color: mat-color($primary, 600), $hide-inactive-labels: false);
+        @include bottom-nav(
+            $background-color: mat-color($accent, 800),
+            $active-color: mat-color($primary, 900),
+            $inactive-color: mat-color($primary, 600),
+            $hide-inactive-labels: false);
         border-color: rgba(0, 0, 0, 0.2);
         height: 3.2em;
     }
 
+    .mat-list-base {
+        padding-top: 0 !important;
+    }
+
+    .mat-expansion-panel {
+        border-radius: 0 !important; 
+        overflow: inherit !important;
+    }
+
+    .mat-expansion-panel-header {
+        background-color: mat-color($accent, 800) !important;
+        color: mat-color($primary, 900) !important;
+        @include mat-elevation(2);
+        z-index: 2;
+        position: sticky;
+        top: 0px;
+        font-size: 2em !important;
+        padding: 0 16px !important;
+    }
+
+    .mat-expansion-indicator::after {
+        color: mat-color($primary, 900) !important;
+    }
+
+    .mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
+        color: mat-color($primary, 900) !important;
+        font-weight: 500;
+    }
+
+    .mat-expansion-panel-body {
+        padding: 0 !important;
+    }
    
     .app-frame {
         background-color: mat-color($primary, 900) !important;
-        height: 100vh;
+        height: -webkit-fill-available;
+        //height: 100vh;
     }
 
     .mat-menu-panel, .mat-select-panel, .mat-form-field-underline {
@@ -32,12 +69,26 @@
         color: mat-color($accent, 200) !important;
     }
 
+    .mat-menu-item {
+        color: mat-color($primary, 900) !important;
+        .mat-icon {
+            color: mat-color($primary, 900) !important;
+        }
+    }
+
+    .mat-menu-item[disabled], .mat-menu-item[disabled]::after {
+        color: mat-color($primary, 600) !important;
+        .mat-icon {
+            color: mat-color($primary, 600) !important;
+        }
+    }
+
     .mat-option {
-        color: mat-color($primary, 100) !important;
+        color: mat-color($primary, 900) !important;
     }
 
     .mat-option.mat-selected:not(.mat-option-disabled) {
-        color: mat-color($primary, 200) !important;
+        color: mat-color($primary, 600) !important;
     }
 
     input:-webkit-autofill,
@@ -61,4 +112,9 @@
             color: inherit;
         }
     }
+}
+
+body::-webkit-scrollbar
+{
+  display: none;
 }

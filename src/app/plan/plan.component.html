@@ -1,14 +1,13 @@
 
 <div *ngFor="let user of users | async">
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header [collapsedHeight]="collapsedHeight" [expandedHeight]="expandedHeight">
 
-    <mat-list [ngClass]="{'jp2': jp2mode}">
+            <mat-panel-title>Poniedziałek</mat-panel-title>
 
-        <article *ngIf="(users | async).length > 1">
-            <h1 mat-subheader>Plan dla {{user.login}}</h1>
-        </article>
+        </mat-expansion-panel-header>
 
-        <article>
-            <h2 mat-subheader>Poniedziałek</h2>
+        <mat-list>
             <div *ngFor="let lesson of user.data.plan.monday; index as i">
                 <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
                     <h4 matLine>{{lesson.name}}</h4>
@@ -16,10 +15,17 @@
                     <mat-divider></mat-divider>
                 </mat-list-item>
             </div>
-        </article>
+        </mat-list>
+    </mat-expansion-panel>
 
-        <article>
-            <h2 mat-subheader>Wtorek</h2>
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header [collapsedHeight]="collapsedHeight" [expandedHeight]="expandedHeight">
+
+            <mat-panel-title>Wtorek</mat-panel-title>
+
+        </mat-expansion-panel-header>
+
+        <mat-list>
             <div *ngFor="let lesson of user.data.plan.tuesday; index as i">
                 <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
                     <h4 matLine>{{lesson.name}}</h4>
@@ -27,10 +33,17 @@
                     <mat-divider></mat-divider>
                 </mat-list-item>
             </div>
-        </article>
+        </mat-list>
+    </mat-expansion-panel>
 
-        <article>
-            <h2 mat-subheader>Środa</h2>
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header [collapsedHeight]="collapsedHeight" [expandedHeight]="expandedHeight">
+
+            <mat-panel-title>Środa</mat-panel-title>
+
+        </mat-expansion-panel-header>
+
+        <mat-list>
             <div *ngFor="let lesson of user.data.plan.wednesday; index as i">
                 <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
                     <h4 matLine>{{lesson.name}}</h4>
@@ -38,10 +51,17 @@
                     <mat-divider></mat-divider>
                 </mat-list-item>
             </div>
-        </article>
+        </mat-list>
+    </mat-expansion-panel>
 
-        <article>
-            <h2 mat-subheader>Czwartek</h2>
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header [collapsedHeight]="collapsedHeight" [expandedHeight]="expandedHeight">
+
+            <mat-panel-title>Czwartek</mat-panel-title>
+
+        </mat-expansion-panel-header>
+
+        <mat-list>
             <div *ngFor="let lesson of user.data.plan.thursday; index as i">
                 <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
                     <h4 matLine>{{lesson.name}}</h4>
@@ -49,10 +69,17 @@
                     <mat-divider></mat-divider>
                 </mat-list-item>
             </div>
-        </article>
+        </mat-list>
+    </mat-expansion-panel>
 
-        <article>
-            <h2 mat-subheader>Piątek</h2>
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header [collapsedHeight]="collapsedHeight" [expandedHeight]="expandedHeight">
+
+            <mat-panel-title>Piątek</mat-panel-title>
+
+        </mat-expansion-panel-header>
+
+        <mat-list>
             <div *ngFor="let lesson of user.data.plan.friday; index as i">
                 <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
                     <h4 matLine>{{lesson.name}}</h4>
@@ -60,7 +87,6 @@
                     <mat-divider></mat-divider>
                 </mat-list-item>
             </div>
-        </article>
-
-    </mat-list>
+        </mat-list>
+    </mat-expansion-panel>
 </div>

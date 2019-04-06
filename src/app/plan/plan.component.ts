@@ -13,6 +13,8 @@ import { AppComponent } from '../app.component';
 })
 
 export class PlanComponent implements OnInit, OnDestroy {
+  collapsedHeight = '48px';
+  expandedHeight = '48px';
   jp2mode = false;
   users: Observable<User[]>;
 
@@ -33,7 +35,6 @@ export class PlanComponent implements OnInit, OnDestroy {
   jp22() {
     const minutes = new Date().getMinutes();
     if (minutes === 37) {
-      this.appComponent.next();
       setTimeout(() => { this.jp22(); }, 20);
     }
   }

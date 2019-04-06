@@ -20,13 +20,16 @@ export class UpdateService {
       this.swUpdate.available.subscribe(event => this.promptUser());
     }
 
-    if (this.userService.isLoggedIn()) {
-      this.userService.synchronization();
-    } else {
-      console.warn('Can\'t download updates while user isn\'t logged in');
+    if (localStorage.getItem('syncState') === 'true') {
+      if (this.userService.isLoggedIn()) {
+        this.userService.synchronization();
+      } else {
+        console.warn('Can\'t download updates while user isn\'t logged in');
+      }
     }
 
-    setTimeout(() => { this.checkForUpdates(); }, 1000 * 60 * 5);
+    // App updates always run
+    setTimeout(() => { this.checkForUpdates(); }, parseInt(localStorage.getItem('syncInterval'), 10));
   }
 
   private promptUser(): void {

@@ -23,6 +23,7 @@ import {
   MatRippleModule,
   MatSlideToggleModule,
   MatSelectModule,
+  MatExpansionModule,
 } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { PlanComponent } from './plan/plan.component';
@@ -32,11 +33,13 @@ import { HeaderInterceptor } from './services/headerInterceptor';
 import { GuardService } from './services/guardService';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { SettingsComponent } from './settings/settings.component';
+import { GradesComponent } from './grades/grades.component';
 
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'grades', component: GradesComponent },
   { path: 'settings', component: SettingsComponent },
   { path: 'plan', component: PlanComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
   { path: '*', redirectTo: '' },
@@ -49,6 +52,7 @@ const appRoutes: Routes = [
     PlanComponent,
     LoginComponent,
     SettingsComponent,
+    GradesComponent,
   ],
   imports: [
     MatSlideToggleModule,
@@ -71,6 +75,7 @@ const appRoutes: Routes = [
     MatInputModule,
     MatSelectModule,
     MatRippleModule,
+    MatExpansionModule,
     MatProgressSpinnerModule,
     RouterModule.forRoot(
       appRoutes,
