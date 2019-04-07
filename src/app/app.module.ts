@@ -37,7 +37,7 @@ import { GradesComponent } from './grades/grades.component';
 
 
 const appRoutes: Routes = [
-  { path: '', component: AppComponent },
+  { path: '', redirectTo: '/plan', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'grades', component: GradesComponent },
   { path: 'settings', component: SettingsComponent },

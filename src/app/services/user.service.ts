@@ -46,7 +46,12 @@ export class User {
     this.password = password;
     this.authentication = authentication;
     this.settings = settings === null ? {} as UserSettings : settings;
-    this.data = data === null ? {} as UserData : data;
+    if (data === null) {
+      this.data = {} as UserData;
+      this.data.plan = {} as Plan;
+    } else {
+      this.data = data;
+    }
   }
 
   save() {
@@ -194,7 +199,6 @@ export class UserService {
           } else {
             // Save
             user.data.plan = result.plan;
-            user.save();
             console.log('Successfully synced plan for ' + user.login);
           }
         });

@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { UpdateService } from './services/update.service';
 import { UserService } from './services/user.service';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { interval } from 'rxjs';
 import { nextContext } from '@angular/core/src/render3';
@@ -24,18 +24,11 @@ export class AppComponent {
               @Inject(DOCUMENT) private document: Document) {
     this.update.checkForUpdates();
 
-    if (this.userService.isLoggedIn()) {
-      this.router.navigate(['plan']);
-    } else {
-      this.router.navigate(['login']);
-    }
-
     const theme = localStorage.getItem('theme');
 
     // Override
     this.document.body.classList.value = theme;
-    this.overlayContainer.getContainerElement().classList.value = 'cdk-overlay-container ' + theme;
-  }
+    this.overlayContainer.getContainerElement().classList.value = 'cdk-overlay-container ' + theme;  }
 
   isLoggedIn() {
     return this.userService.isLoggedIn();
