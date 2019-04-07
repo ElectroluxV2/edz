@@ -80,6 +80,8 @@ export class UserService {
   }
 
   getUsers(): Observable<User[]> {
+    // Required by multi instance
+    this.loadSavedUsers();
     return of(this.users);
   }
 
@@ -90,25 +92,19 @@ export class UserService {
       if (key.includes('user-')) {
         const saved: User = JSON.parse(localStorage.getItem(key));
 
-        // Use constructor
-        const user: User = new User(
-          saved.login,
-          saved.password,
-          saved.authentication,
-          saved.settings,
-          saved.data
-        );
-
         let add = true;
-        for (const u of this.users) {
-          if (u.login === user.login) {
+        for (let u of this.users) {
+          if (u.login === saved.login) {
+            // Set
+            u = saved;
             add = false;
             break;
           }
         }
 
         if (add) {
-          this.users.push(user);
+          this.users.push(saved);
+          console.log(this.users);
         }
       }
     }
@@ -149,19 +145,24 @@ export class UserService {
         }
         // Create new user
         const newUser: User = new User(login, md5pass, btoa(login + ':' + code));
-        // Save
-        newUser.save();
+        // DO NOT SAVE BEFORE SYNC
+        // newUser.save();
         // Add user to array
         this.users.push(newUser);
         // Get data for all users
-        this.synchronization();
-        resolve(result);
+        this.synchronization().then(() => {
+          resolve(result);
+        }).catch((message) => {
+          reject(message);
+        });
       });
     });
   }
 
   synchronization() {
-    this.getPlan().then(() => {
+    // Load from another instances
+    this.loadSavedUsers();
+    return this.getPlan().then(() => {
       console.log('Plan synchronization completed');
     }).catch((message) => {
       console.warn(message);
@@ -169,7 +170,6 @@ export class UserService {
   }
 
   private getPlan() {
-    this.loadSavedUsers();
     return new Promise((resolve, reject) => {
 
       if (this.users.length === 0) {
@@ -199,6 +199,7 @@ export class UserService {
           } else {
             // Save
             user.data.plan = result.plan;
+            user.save();
             console.log('Successfully synced plan for ' + user.login);
           }
         });

@@ -55,12 +55,13 @@ export class LoginComponent implements OnInit {
     this.userService.loginUser(this.login, this.password, this.code).then(result => {
       Swal.hideLoading();
       this.loading = false;
-      this.router.navigate(['plan']);
       Swal.fire({
         title: 'Kim jestes?',
         text: 'Zalogowano!',
         type: 'success',
         allowOutsideClick: true,
+      }).then(() => {
+        this.router.navigate(['plan']);
       });
     }).catch(result => {
       this.loading = false;

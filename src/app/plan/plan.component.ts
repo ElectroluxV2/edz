@@ -15,7 +15,7 @@ export class PlanComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService) {
     this.users = this.userService.getUsers().pipe();
-    console.error(this.users);
+    console.log(this.users);
   }
 
   ngOnInit(): void {

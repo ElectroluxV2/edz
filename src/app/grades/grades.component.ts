@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService, User } from '../services/user.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-grades',
@@ -6,13 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./grades.component.scss']
 })
 export class GradesComponent implements OnInit {
-
   collapsedHeight = '48px';
   expandedHeight = '48px';
+  users: Observable<User[]>;
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private userService: UserService) {
+    this.users = this.userService.getUsers().pipe();
+    console.error(this.users);
   }
 
+  ngOnInit() { }
 }
