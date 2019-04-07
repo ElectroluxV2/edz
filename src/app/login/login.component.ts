@@ -53,15 +53,30 @@ export class LoginComponent implements OnInit {
     Swal.showLoading();
 
     this.userService.loginUser(this.login, this.password, this.code).then(result => {
-      Swal.hideLoading();
-      this.loading = false;
       Swal.fire({
-        title: 'Kim jestes?',
-        text: 'Zalogowano!',
-        type: 'success',
-        allowOutsideClick: true,
-      }).then(() => {
-        this.router.navigate(['plan']);
+        title: 'Już wiemy kim jesteś',
+        text: 'Teraz pobieramy Twoje dane żeby cię okraść',
+        type: 'info',
+        allowOutsideClick: false,
+      });
+      Swal.showLoading();
+      // Now sync
+      // Get data for all
+      this.userService.synchronization().then(() => {
+        Swal.hideLoading();
+        Swal.fire({
+          title: 'Już za pózno',
+          text: 'Zalogowano!',
+          type: 'success',
+          allowOutsideClick: true,
+        }).then(() => {
+          this.loading = false;
+          this.router.navigate(['plan']);
+        });
+      }).catch((message) => {
+        this.loading = false;
+        Swal.hideLoading();
+        Swal.showValidationMessage(message);
       });
     }).catch(result => {
       this.loading = false;

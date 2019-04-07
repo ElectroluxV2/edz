@@ -27,7 +27,7 @@ export class UpdateService {
       }
     } else {
       this.checkForUpdates();
-      setTimeout(() => { this.sync(); }, 1800000);
+      this.sync();
     }
   }
 

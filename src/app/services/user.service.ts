@@ -24,8 +24,27 @@ export interface Plan {
   friday: Lesson[];
 }
 
+export interface Grade {
+  category: string;
+  grade: string;
+  value: string;
+  weight: number;
+  period: number;
+  average: boolean;
+  individual: boolean;
+  description: string;
+  date: string;
+  issuer: string;
+}
+
+export interface GradeLesson {
+  name: string;
+  grades: Grade[];
+}
+
 export interface UserData {
   plan: Plan;
+  grades: GradeLesson[];
 }
 
 export class User {
@@ -75,6 +94,7 @@ export class UserService {
   users: User[] = [];
   loginUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/login';
   planUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/plan';
+  gradesUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/grades';
   constructor(private http: HttpClient) {
     this.loadSavedUsers();
   }
@@ -92,18 +112,21 @@ export class UserService {
       if (key.includes('user-')) {
         const saved: User = JSON.parse(localStorage.getItem(key));
 
+        // Force to use constructor
+        const newUser = new User(saved.login, saved.password, saved.authentication, saved.settings, saved.data);
+
         let add = true;
         for (let u of this.users) {
-          if (u.login === saved.login) {
+          if (u.login === newUser.login) {
             // Set
-            u = saved;
+            u = newUser;
             add = false;
             break;
           }
         }
 
         if (add) {
-          this.users.push(saved);
+          this.users.push(newUser);
           console.log(this.users);
         }
       }
@@ -149,34 +172,68 @@ export class UserService {
         // newUser.save();
         // Add user to array
         this.users.push(newUser);
-        // Get data for all users
-        this.synchronization().then(() => {
-          resolve(result);
-        }).catch((message) => {
-          reject(message);
-        });
+        resolve();
       });
     });
   }
 
-  synchronization() {
+  async synchronization() {
     // Load from another instances
     this.loadSavedUsers();
-    return this.getPlan().then(() => {
-      console.log('Plan synchronization completed');
-    }).catch((message) => {
-      console.warn(message);
+
+    if (this.users.length === 0) {
+      console.warn('Trying to sync without user!');
+      return false;
+    }
+
+    const res1 = await this.getPlan().catch(() => {
+      return false;
+    });
+
+    const res2 = await this.getGrades().catch(() => {
+      return false;
+    });
+
+    // Save for other instances
+    for (const user of this.users) {
+      user.save();
+    }
+
+    return true;
+  }
+
+  private getGrades() {
+    return new Promise((resolve, reject) => {
+
+      interface GradesResponse {
+        status: string;
+        code: number;
+        message: string;
+        grades: GradeLesson[];
+      }
+
+      // Sync for all users
+      for (let i = 0; i < this.users.length; i++) {
+        // For headerInterceptor.ts
+        localStorage.setItem('token', this.users[i].authentication);
+        this.http.post(this.gradesUrl, { login: this.users[i].login, pass: this.users[i].password }).subscribe((result: GradesResponse) => {
+          if (result.code !== 3) {
+            reject(result.message);
+          } else {
+            // Save
+            this.users[i].data.grades = result.grades;
+            console.log('Successfully synced grades for ' + this.users[i].login);
+            if (i === this.users.length - 1) {
+              resolve();
+            }
+          }
+        });
+      }
     });
   }
 
   private getPlan() {
     return new Promise((resolve, reject) => {
-
-      if (this.users.length === 0) {
-        console.warn('Trying to get plan without user!');
-        reject('No logged in accounts');
-        return;
-      }
 
        // Response from api
       interface PlanResponse {
@@ -187,24 +244,25 @@ export class UserService {
       }
 
       // Sync for all users
-      for (const user of this.users) {
+      for (let i = 0; i < this.users.length; i++) {
 
-        console.log('Synchronizations started for ' + user.login);
+        // console.log('Synchronizations started for ' + user.login);
         // For headerInterceptor.ts
-        localStorage.setItem('token', user.authentication);
+        localStorage.setItem('token', this.users[i].authentication);
 
-        this.http.post(this.planUrl, { login: user.login, pass: user.password }).subscribe((result: PlanResponse) => {
+        this.http.post(this.planUrl, { login: this.users[i].login, pass: this.users[i].password }).subscribe((result: PlanResponse) => {
           if (result.code !== 3) {
             reject(result.message);
           } else {
             // Save
-            user.data.plan = result.plan;
-            user.save();
-            console.log('Successfully synced plan for ' + user.login);
+            this.users[i].data.plan = result.plan;
+            console.log('Successfully synced plan for ' + this.users[i].login);
+            if (i === this.users.length - 1) {
+              resolve();
+            }
           }
         });
       }
-      resolve();
     });
   }
 }

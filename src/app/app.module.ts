@@ -39,8 +39,8 @@ import { GradesComponent } from './grades/grades.component';
 const appRoutes: Routes = [
   { path: '', redirectTo: '/plan', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'grades', component: GradesComponent },
-  { path: 'settings', component: SettingsComponent },
+  { path: 'grades', component: GradesComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
+  { path: 'settings', component: SettingsComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
   { path: 'plan', component: PlanComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
   { path: '*', redirectTo: '' },
 ];
