@@ -1,10 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { UpdateService } from './services/update.service';
 import { UserService } from './services/user.service';
-import { Router, NavigationStart } from '@angular/router';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { interval } from 'rxjs';
-import { nextContext } from '@angular/core/src/render3';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
@@ -19,7 +16,6 @@ export class AppComponent {
 
   constructor(private update: UpdateService,
               private userService: UserService,
-              private router: Router,
               private overlayContainer: OverlayContainer,
               @Inject(DOCUMENT) private document: Document) {
     this.update.checkForUpdates();

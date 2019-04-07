@@ -8,7 +8,7 @@
 
         <mat-list>
             <div *ngFor="let lesson of user.data.plan.monday; index as i">
-                <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
+                <mat-list-item matRipple *ngIf="!lesson.empty" >
                     <h4 matLine>{{lesson.name}}</h4>
                     <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
                     <mat-divider></mat-divider>
@@ -26,7 +26,7 @@
 
         <mat-list>
             <div *ngFor="let lesson of user.data.plan.tuesday; index as i">
-                <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
+                <mat-list-item matRipple *ngIf="!lesson.empty" >
                     <h4 matLine>{{lesson.name}}</h4>
                     <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
                     <mat-divider></mat-divider>
@@ -44,7 +44,7 @@
 
         <mat-list>
             <div *ngFor="let lesson of user.data.plan.wednesday; index as i">
-                <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
+                <mat-list-item matRipple *ngIf="!lesson.empty" >
                     <h4 matLine>{{lesson.name}}</h4>
                     <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
                     <mat-divider></mat-divider>
@@ -62,7 +62,7 @@
 
         <mat-list>
             <div *ngFor="let lesson of user.data.plan.thursday; index as i">
-                <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
+                <mat-list-item matRipple *ngIf="!lesson.empty" >
                     <h4 matLine>{{lesson.name}}</h4>
                     <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
                     <mat-divider></mat-divider>
@@ -80,7 +80,7 @@
 
         <mat-list>
             <div *ngFor="let lesson of user.data.plan.friday; index as i">
-                <mat-list-item matRipple *ngIf="!lesson.empty" [ngClass]="{'jp2item': jp2mode}">
+                <mat-list-item matRipple *ngIf="!lesson.empty" >
                     <h4 matLine>{{lesson.name}}</h4>
                     <p matLine class="demo-2"> {{lesson.time}} {{lesson.teacher}}</p>
                     <mat-divider></mat-divider>
