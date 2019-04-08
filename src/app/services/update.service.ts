@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class UpdateService {
 
   constructor(private swUpdate: SwUpdate, private userService: UserService, private router: Router) {
+    this.checkForUpdates();
     if (!this.userService.isLoggedIn()) {
       // Fresh install check
       if (!localStorage.getItem('version')) {
@@ -26,21 +27,22 @@ export class UpdateService {
         }
       }
     } else {
-      this.checkForUpdates();
       this.sync();
-     // setTimeout(() => { this.sync(); }, parseInt(localStorage.getItem('syncInterval'), 10));
     }
   }
 
   public checkForUpdates(): void {
-    console.log('Checking for updates');
-
     if (this.swUpdate.isEnabled) {
+      console.log('Checking for updates');
       this.swUpdate.checkForUpdate();
-      this.swUpdate.available.subscribe(event => this.promptUser());
+      this.swUpdate.available.subscribe(event => {
+
+        alert('Aktualizacja!');
+        this.swUpdate.activateUpdate().then(() => {
+          document.location.reload();
+        });
+      });
     }
-    // App updates always run
-    setTimeout(() => { this.checkForUpdates(); }, parseInt(localStorage.getItem('syncInterval'), 10));
   }
 
   private sync() {
@@ -53,12 +55,5 @@ export class UpdateService {
     } else {
       console.warn('Can\'t sync data while user isn\'t logged in');
     }
-  }
-
-  private promptUser(): void {
-    alert('Aktualizacja!');
-    this.swUpdate.activateUpdate().then(() => {
-      document.location.reload();
-    });
   }
 }
