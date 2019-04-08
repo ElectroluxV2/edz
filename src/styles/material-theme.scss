@@ -4,10 +4,39 @@
 
 @include mat-core();
 
-// Our dark theme
-.dark-theme {
-  $dark-primary: mat-palette($black);
-  $dark-accent: mat-palette($gray);
+.red2 {
+  $dark-primary: mat-palette($red2a);
+  $dark-accent: mat-palette($red2b);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}
+
+.purple2 {
+  $dark-primary: mat-palette($purple2a);
+  $dark-accent: mat-palette($purple2b);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}
+
+.brown1 {
+  $dark-primary: mat-palette($brown1a);
+  $dark-accent: mat-palette($brown1b);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  
+  @include angular-material-theme($dark-theme);
+  @include component-themes($dark-theme);
+}
+
+.brown2 {
+  $dark-primary: mat-palette($brown2a);
+  $dark-accent: mat-palette($brown2b);
   $dark-warn: mat-palette($mat-red);
   $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
   

@@ -12,8 +12,6 @@ import { DOCUMENT } from '@angular/common';
 
 
 export class AppComponent {
-  title = 'EDZ';
-
   constructor(private update: UpdateService,
               private userService: UserService,
               private overlayContainer: OverlayContainer,
