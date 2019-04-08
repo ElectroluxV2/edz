@@ -28,6 +28,7 @@ export class UpdateService {
     } else {
       this.checkForUpdates();
       this.sync();
+     // setTimeout(() => { this.sync(); }, parseInt(localStorage.getItem('syncInterval'), 10));
     }
   }
 
@@ -44,13 +45,13 @@ export class UpdateService {
 
   private sync() {
     if (this.userService.isLoggedIn()) {
-      this.userService.synchronization();
+      this.userService.synchronization().then(() => {
+        if (localStorage.getItem('syncState') === 'true') {
+          setTimeout(() => { this.sync(); }, parseInt(localStorage.getItem('syncInterval'), 10));
+        }
+      });
     } else {
       console.warn('Can\'t sync data while user isn\'t logged in');
-    }
-
-    if (localStorage.getItem('syncState') === 'true') {
-      setTimeout(() => { this.sync(); }, parseInt(localStorage.getItem('syncInterval'), 10));
     }
   }
 

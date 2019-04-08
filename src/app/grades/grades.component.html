@@ -1,23 +1,25 @@
 <div *ngFor="let user of users | async">
-  <div *ngFor="let lesson of user.data.grades">
-    <mat-expansion-panel [expanded]="false">
-        <mat-expansion-panel-header [collapsedHeight]="collapsedHeight" [expandedHeight]="expandedHeight">
+    <mat-list>
+      <div *ngFor="let lesson of user.data.grades; index as i">
+        <article>
+        <h3 matSubheader (click)="states[i] = !states[i]">{{lesson.name}}</h3>
+        <mat-expansion-panel [expanded]="states[i]">
+          <mat-expansion-panel-header>
+          </mat-expansion-panel-header>
 
-          <mat-panel-title>{{lesson.name}}</mat-panel-title>
+          <mat-list>
+            <mat-list-item matRipple *ngFor="let grade of lesson.grades">
+              <h4 matLine><b>{{grade.grade}}</b></h4>
+              <p matLine>{{grade.category}}</p>
+              <p matLine>{{grade.description}}</p>
+              <p matLine>{{grade.date}}</p>
+              <p matLine>{{grade.issuer}}</p>
+              <mat-divider></mat-divider>
+            </mat-list-item>
+          </mat-list>
 
-        </mat-expansion-panel-header>
-
-        <mat-list>
-          <mat-list-item matRipple *ngFor="let grade of lesson.grades">
-            <h4 matLine><b>{{grade.grade}}</b></h4>
-            <p matLine>{{grade.category}}</p>
-            <p matLine>{{grade.description}}</p>
-            <p matLine>{{grade.date}}</p>
-            <p matLine>{{grade.issuer}}</p>
-            <mat-divider></mat-divider>
-          </mat-list-item>
-        </mat-list>
-    
-      </mat-expansion-panel>
-  </div>
+        </mat-expansion-panel>
+        </article>
+    </div>
+  </mat-list>
 </div>

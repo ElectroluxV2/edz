@@ -20,17 +20,7 @@
         color: mat-color($accent, 200) !important;
     }
 
-    .jp2item {
-        background-color: rgba(mat-color($primary, 900), 0.8) !important;
+    .mat-list-base .mat-subheader:first-child {
+        margin-top: 0px !important;
     }
-
-    .jp2 {
-        background-image: url('http://budziszm.pro-linuxpl.com/jp2k.gif');
-        background-size: contain;
-    }
-
-    .mat-list > article:not(:first-child) {
-        margin-top: 8px;
-    }
-
 }

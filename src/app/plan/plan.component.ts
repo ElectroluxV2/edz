@@ -12,6 +12,7 @@ export class PlanComponent implements OnInit, OnDestroy {
   collapsedHeight = '48px';
   expandedHeight = '48px';
   users: Observable<User[]>;
+  states: boolean[] = [];
 
   constructor(private userService: UserService) {
     this.users = this.userService.getUsers().pipe();

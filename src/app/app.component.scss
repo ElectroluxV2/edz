@@ -20,10 +20,11 @@
 
     .mat-expansion-panel {
         border-radius: 0 !important; 
-        overflow: inherit !important;
+        // overflow: inherit !important;
     }
 
     .mat-expansion-panel-header {
+        display: none !important;
         background-color: mat-color($accent, 800) !important;
         color: mat-color($primary, 900) !important;
         @include mat-elevation(2);
