@@ -1,0 +1,33 @@
+@import '~@angular/material/theming';
+
+@mixin calendar-dialog-theme($theme) {
+    $accent: map-get($theme, accent);
+    $primary: map-get($theme, primary);
+    $warn: map-get($theme, warn);
+
+    .mat-dialog-container {
+        background-color: mat-color($accent, 800) !important;
+        color: mat-color($primary, 900) !important;
+    }
+
+    .mat-dialog-title {
+        font-weight: 900;
+    }
+
+
+    h3[lesson] {
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .mat-divider {
+        margin-top: 16px;
+        margin-bottom: 16px;
+        border-color: mat-color($primary, 500) !important;
+    }
+
+    .mat-button {
+        background-color: mat-color($primary, 900) !important;
+        color: mat-color($accent, 200) !important;
+    }
+}

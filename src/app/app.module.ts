@@ -24,6 +24,7 @@ import {
   MatSlideToggleModule,
   MatSelectModule,
   MatExpansionModule,
+  MatDialogModule,
 } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { PlanComponent } from './plan/plan.component';
@@ -34,12 +35,20 @@ import { GuardService } from './services/guardService';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { SettingsComponent } from './settings/settings.component';
 import { GradesComponent } from './grades/grades.component';
+import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarDialogComponent } from './calendar/dialog';
+import { registerLocaleData } from '@angular/common';
+import localePl from '@angular/common/locales/pl';
+import localePlExtra from '@angular/common/locales/extra/pl';
+
+registerLocaleData(localePl, 'pl-PL', localePlExtra);
 
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/plan', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'grades', component: GradesComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
+  { path: 'calendar', component: CalendarComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
   { path: 'settings', component: SettingsComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
   { path: 'plan', component: PlanComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
   { path: '*', redirectTo: '' },
@@ -53,6 +62,11 @@ const appRoutes: Routes = [
     LoginComponent,
     SettingsComponent,
     GradesComponent,
+    CalendarComponent,
+    CalendarDialogComponent
+  ],
+  entryComponents: [
+    CalendarDialogComponent
   ],
   imports: [
     MatSlideToggleModule,
@@ -77,6 +91,7 @@ const appRoutes: Routes = [
     MatRippleModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: false } // <-- debugging purposes only

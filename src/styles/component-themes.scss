@@ -1,9 +1,14 @@
 @import '../app/plan/plan.component';
 @import '../app/app.component';
 @import '../app/login/login.component';
+@import '../app/calendar/calendar.component';
+@import '../app/calendar/dialog';
+
 
 @mixin component-themes($theme) {
   @include nav-theme($theme);
   @include plan-theme($theme);
   @include login-theme($theme);
+  @include calendar-theme($theme);
+  @include calendar-dialog-theme($theme);
 }

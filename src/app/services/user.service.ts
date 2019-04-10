@@ -9,6 +9,35 @@ export interface UserSettings {
   theme: string;
 }
 
+export interface Exam {
+  school: string;
+  group: string;
+  category: string;
+  type: string;
+  location: string;
+  lesson: string;
+  subject: string;
+  target: string;
+  info: string;
+  dateStart: string;
+  dateEnd: string;
+  dateAdded: string;
+  issuer: string;
+}
+
+export interface Homework {
+  school: string;
+  group: string;
+  lesson: string;
+  info: string;
+  dateEnd: string;
+}
+
+export interface Calendar {
+  exams: Exam[];
+  homeworks: Homework[];
+}
+
 export interface Lesson {
   name: string;
   time: string;
@@ -45,6 +74,7 @@ export interface GradeLesson {
 export interface UserData {
   plan: Plan;
   grades: GradeLesson[];
+  calendar: Calendar;
 }
 
 export class User {
@@ -95,6 +125,7 @@ export class UserService {
   loginUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/login';
   planUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/plan';
   gradesUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/grades';
+  calendarUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/calendar';
   constructor(private http: HttpClient) {
     this.loadSavedUsers();
   }
@@ -127,7 +158,6 @@ export class UserService {
 
         if (add) {
           this.users.push(newUser);
-          console.log(this.users);
         }
       }
     }
@@ -194,6 +224,10 @@ export class UserService {
       return false;
     });
 
+    const res3 = await this.getCalendar().catch(() => {
+      return false;
+    });
+
     // Save for other instances
     for (const user of this.users) {
       user.save();
@@ -201,6 +235,37 @@ export class UserService {
 
     return true;
   }
+
+  private getCalendar() {
+    return new Promise((resolve, reject) => {
+
+      interface CalendarResponse {
+        status: string;
+        code: number;
+        message: string;
+        calendar: Calendar;
+      }
+
+      // Sync for all users
+      for (let i = 0; i < this.users.length; i++) {
+        // For headerInterceptor.ts
+        localStorage.setItem('token', this.users[i].authentication);
+        this.http.post(this.calendarUrl, { login: this.users[i].login, pass: this.users[i].password }).subscribe((result: CalendarResponse) => {
+          if (result.code !== 3) {
+            reject(result.message);
+          } else {
+            // Save
+            this.users[i].data.calendar = result.calendar;
+            console.log('Successfully synced calendar for ' + this.users[i].login);
+            if (i === this.users.length - 1) {
+              resolve();
+            }
+          }
+        });
+      }
+    });
+  }
+
 
   private getGrades() {
     return new Promise((resolve, reject) => {

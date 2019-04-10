@@ -1,0 +1,18 @@
+<div class="calHeader">
+  <mat-grid-list cols="7" rowHeight="1.2em">
+    <mat-grid-tile>N</mat-grid-tile>
+    <mat-grid-tile>P</mat-grid-tile>
+    <mat-grid-tile>W</mat-grid-tile>
+    <mat-grid-tile>Ś</mat-grid-tile>
+    <mat-grid-tile>C</mat-grid-tile>
+    <mat-grid-tile>P</mat-grid-tile>
+    <mat-grid-tile>S</mat-grid-tile>
+  </mat-grid-list>
+</div>
+
+<mat-grid-list class="calContent" cols="7" rowHeight="1:1" *ngFor="let month of months">
+  <h3 matLine>{{month.text}}</h3>
+  <mat-grid-tile *ngFor="let day of month.days">
+    <article matRipple class="day" (click)="show(day.date)" [ngClass]="{ 'sphere': day.highlight, 'disabled': day.disabled, 'now': day.current }">{{day.text}}</article>
+  </mat-grid-tile>
+</mat-grid-list>

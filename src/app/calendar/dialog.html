@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>{{data.date | date:'fullDate':'':'pl-PL' }}</h2>
+<mat-dialog-content class="mat-typography">
+
+  <article *ngFor="let exam of data.exams; let last = last;">
+    <h3 lesson>{{exam.lesson}}</h3>
+    <div *ngIf="exam.info"><b>Informacje: </b>{{exam.info}}<br></div>
+    <div *ngIf="exam.category"><b>Kategoria: </b>{{exam.category}}<br></div>
+    <div *ngIf="exam.type"><b>Typ: </b>{{exam.type}}<br></div>
+    <div *ngIf="exam.subject"><b>Temat: </b>{{exam.subject}}<br></div>
+    <div *ngIf="exam.target"><b>Cel: </b>{{exam.target}}<br></div>
+    <div *ngIf="exam.group"><b>Grupa: </b>{{exam.group}}<br></div>
+    <div *ngIf="exam.dateAdded"><b>Dodano: </b>{{exam.dateAdded}}<br></div>
+    <div *ngIf="exam.issuer"><b>Przez: </b>{{exam.issuer}}<br></div>
+    <div *ngIf="exam.location"><b>Gdzie: </b>{{exam.location}}<br></div>
+    <div *ngIf="exam.school"><b>Szkoła: </b>{{exam.school}}<br></div>
+    <mat-divider *ngIf="!last"></mat-divider>
+  </article>
+
+  <article *ngFor="let homework of data.homeworks; let last = last;">
+    <mat-divider *ngIf="data.exams.length"></mat-divider>
+    <h3 lesson>{{homework.lesson}}</h3>
+    <div *ngIf="homework.info"><b>Informacje: </b>{{homework.info}}<br></div>
+    <div *ngIf="homework.group"><b>Grupa: </b>{{homework.group}}<br></div>
+    <div *ngIf="homework.school"><b>Szkoła: </b>{{homework.school}}<br></div>
+    <mat-divider *ngIf="!last"></mat-divider>
+  </article>
+  
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>:c</button>
+</mat-dialog-actions>
