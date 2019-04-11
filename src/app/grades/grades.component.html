@@ -1,5 +1,8 @@
 <div *ngFor="let user of users | async">
     <mat-list>
+      <article *ngIf="(users | async)?.length > 0">
+        <h3 matSubheader>{{user.login}}</h3>
+      </article>
       <div *ngFor="let lesson of user.data.grades; index as i">
         <article>
         <h3 matSubheader (click)="states[i] = !states[i]">{{lesson.name}}</h3>
