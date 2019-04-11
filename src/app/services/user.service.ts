@@ -185,6 +185,14 @@ export class UserService {
   loginUser(login: string, password: string, code: string) {
     return new Promise((resolve, reject) => {
 
+      for (const user of this.users) {
+        if (user.login === login) {
+          reject({
+            message: 'To konto już jest zalogowane'
+          });
+        }
+      }
+
       // Response from api
       interface LoginResponse {
         status: string;

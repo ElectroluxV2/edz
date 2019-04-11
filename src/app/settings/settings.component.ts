@@ -54,5 +54,10 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  addUser() {
+    localStorage.setItem('bypasLoginComponentLock', 'true');
+    this.router.navigate(['login']);
+  }
+
   ngOnInit() { }
 }

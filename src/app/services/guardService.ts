@@ -21,7 +21,12 @@ export class GuardService implements CanActivate, CanDeactivate {
   canDeactivate(component: any, route: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): boolean {
     if (nextState.url.includes('login')) {
       if (this.userService.isLoggedIn()) {
-        return false;
+        if (localStorage.getItem('bypasLoginComponentLock')) {
+          localStorage.removeItem('bypasLoginComponentLock');
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return true;
       }
