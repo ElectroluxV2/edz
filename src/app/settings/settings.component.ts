@@ -5,6 +5,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { MatSlideToggleChange } from '@angular/material';
 import { UserService, User } from '../services/user.service';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -38,7 +39,7 @@ export class SettingsComponent implements OnInit {
      localStorage.setItem('syncState', event.checked.toString());
   }
 
-  constructor(@Inject(DOCUMENT) private document: Document, private overlayContainer: OverlayContainer, private userService: UserService) {
+  constructor(@Inject(DOCUMENT) private document: Document, private overlayContainer: OverlayContainer, private userService: UserService, private router: Router) {
     this.themeSelected = localStorage.getItem('theme');
     this.syncState = (localStorage.getItem('syncState') === 'true');
     this.syncInterval = localStorage.getItem('syncInterval');
@@ -46,7 +47,11 @@ export class SettingsComponent implements OnInit {
   }
 
   deleteUser(login: string) {
-   // this.userService
+    this.userService.deleteUser(login);
+    // Router to login
+    if (!this.userService.isLoggedIn()) {
+      this.router.navigate(['login']);
+    }
   }
 
   ngOnInit() { }

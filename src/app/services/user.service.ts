@@ -169,6 +169,19 @@ export class UserService {
     return (this.users.length) ? true : false;
   }
 
+  deleteUser(login: string) {
+    // Load users
+    this.loadSavedUsers();
+    // Remove from memory
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].login === login) {
+        this.users.splice(i, 1);
+      }
+    }
+    // Remove from storage
+    localStorage.removeItem('user-' + login);
+  }
+
   loginUser(login: string, password: string, code: string) {
     return new Promise((resolve, reject) => {
 
