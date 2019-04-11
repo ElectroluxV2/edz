@@ -57,6 +57,19 @@
 
   <mat-divider></mat-divider>
 
+  <mat-list-item>
+    <mat-icon matListIcon>people</mat-icon>
+    <p matLine>Konta </p>
+  </mat-list-item>
+
+  <div *ngFor="let user of users | async; index as i">
+    <mat-list-item>
+      <p matLine>{{user.login}}</p>
+      <button class="mat-button-n" mat-button (click)="deleteUser(user.login)">Usuń</button>
+    </mat-list-item>
+  </div>
+
+  <mat-divider></mat-divider>
   
 </mat-list>
 

@@ -7,11 +7,16 @@
     .bottom-nav {
         @include bottom-nav(
             $background-color: mat-color($accent, 800),
-            $active-color: mat-color($primary, 900),
-            $inactive-color: mat-color($primary, 600),
+            $active-color: mat-color($primary, 600),
+            $inactive-color: mat-color($primary, 900),
             $hide-inactive-labels: false);
         border-color: rgba(0, 0, 0, 0.2);
         height: 3.2em;
+    }
+
+    .mat-button-n {
+        background-color: mat-color($accent, 900) !important;
+        color: mat-color($primary, 200) !important;
     }
 
     .mat-list-base {

@@ -3,6 +3,8 @@ import { DOCUMENT } from '@angular/common';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { MatSelectChange } from '@angular/material/select';
 import { MatSlideToggleChange } from '@angular/material';
+import { UserService, User } from '../services/user.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-settings',
@@ -10,7 +12,7 @@ import { MatSlideToggleChange } from '@angular/material';
   styleUrls: ['./settings.component.sass']
 })
 export class SettingsComponent implements OnInit {
-
+  users: Observable<User[]>;
   syncInterval: string;
   syncState: boolean;
   themeSelected: string;
@@ -36,10 +38,15 @@ export class SettingsComponent implements OnInit {
      localStorage.setItem('syncState', event.checked.toString());
   }
 
-  constructor(@Inject(DOCUMENT) private document: Document, private overlayContainer: OverlayContainer) {
+  constructor(@Inject(DOCUMENT) private document: Document, private overlayContainer: OverlayContainer, private userService: UserService) {
     this.themeSelected = localStorage.getItem('theme');
     this.syncState = (localStorage.getItem('syncState') === 'true');
     this.syncInterval = localStorage.getItem('syncInterval');
+    this.users = this.userService.getUsers().pipe();
+  }
+
+  deleteUser(login: string) {
+   // this.userService
   }
 
   ngOnInit() { }

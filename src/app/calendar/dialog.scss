@@ -26,7 +26,7 @@
         border-color: mat-color($primary, 500) !important;
     }
 
-    .mat-button {
+    .mat-dialog-actions>.mat-button {
         background-color: mat-color($primary, 900) !important;
         color: mat-color($accent, 200) !important;
     }
