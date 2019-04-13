@@ -41,6 +41,9 @@
         height: 10vw;
         text-align: center;
         line-height: 10vw;
+        border: 2px solid;
+        border-color: mat-color($primary, 900) !important;
+        border-radius:50%;
     }
 
     .disabled {

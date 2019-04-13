@@ -13,6 +13,6 @@
 <mat-grid-list class="calContent" cols="7" rowHeight="1:1" *ngFor="let month of months">
   <h3 matLine>{{month.text}}</h3>
   <mat-grid-tile *ngFor="let day of month.days">
-    <article matRipple class="day" (click)="show(day.date)" [ngClass]="{ 'sphere': day.highlight, 'disabled': day.disabled, 'now': day.current }">{{day.text}}</article>
+    <article matRipple [matRippleDisabled]="day.text==' '" class="day" (click)="show(day.date)" [ngClass]="{ 'sphere': day.highlight, 'disabled': day.disabled, 'now': day.current }">{{day.text}}</article>
   </mat-grid-tile>
 </mat-grid-list>
