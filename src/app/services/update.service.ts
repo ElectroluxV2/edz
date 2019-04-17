@@ -3,13 +3,14 @@ import { SwUpdate } from '@angular/service-worker';
 import { interval } from 'rxjs';
 import { UserService, User } from './user.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UpdateService {
 
-  constructor(private swUpdate: SwUpdate, private userService: UserService, private router: Router) {
+  constructor(private swUpdate: SwUpdate, private userService: UserService, private router: Router, private snackBar: MatSnackBar) {
     this.checkForUpdates();
     if (!this.userService.isLoggedIn()) {
       // Fresh install check
@@ -36,10 +37,10 @@ export class UpdateService {
       console.log('Checking for updates');
       this.swUpdate.checkForUpdate();
       this.swUpdate.available.subscribe(event => {
-
-        alert('Aktualizacja!');
-        this.swUpdate.activateUpdate().then(() => {
-          document.location.reload();
+        this.snackBar.open('Aktualizacja!', 'odśwież').onAction().subscribe(() => {
+          this.swUpdate.activateUpdate().then(() => {
+            document.location.reload();
+          });
         });
       });
     }

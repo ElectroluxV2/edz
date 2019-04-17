@@ -25,6 +25,7 @@ import {
   MatSelectModule,
   MatExpansionModule,
   MatDialogModule,
+  MatSnackBarModule,
 } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { PlanComponent } from './plan/plan.component';
@@ -92,6 +93,7 @@ const appRoutes: Routes = [
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    MatSnackBarModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: false } // <-- debugging purposes only
