@@ -6,6 +6,7 @@ import { MatSlideToggleChange } from '@angular/material';
 import { UserService, User } from '../services/user.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { UpdateService } from '../services/update.service';
 
 @Component({
   selector: 'app-settings',
@@ -14,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class SettingsComponent implements OnInit {
   users: Observable<User[]>;
+  lastSync: Date;
   syncInterval: string;
   syncState: boolean;
   themeSelected: string;
@@ -39,11 +41,18 @@ export class SettingsComponent implements OnInit {
      localStorage.setItem('syncState', event.checked.toString());
   }
 
-  constructor(@Inject(DOCUMENT) private document: Document, private overlayContainer: OverlayContainer, private userService: UserService, private router: Router) {
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private overlayContainer: OverlayContainer,
+    private userService: UserService,
+    private router: Router) {
+
     this.themeSelected = localStorage.getItem('theme');
     this.syncState = (localStorage.getItem('syncState') === 'true');
     this.syncInterval = localStorage.getItem('syncInterval');
     this.users = this.userService.getUsers().pipe();
+    this.lastSync = new Date(localStorage.getItem('lastSync'));
+    this.calcTimeToSync();
   }
 
   deleteUser(login: string) {
@@ -52,6 +61,11 @@ export class SettingsComponent implements OnInit {
     if (!this.userService.isLoggedIn()) {
       this.router.navigate(['login']);
     }
+  }
+
+  calcTimeToSync() {
+    this.lastSync = new Date(localStorage.getItem('lastSync'));
+    setTimeout(() => { this.calcTimeToSync(); }, 5000);
   }
 
   addUser() {

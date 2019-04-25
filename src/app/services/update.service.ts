@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { interval } from 'rxjs';
-import { UserService, User } from './user.service';
-import { Router } from '@angular/router';
+import { UserService } from './user.service';
 import { MatSnackBar } from '@angular/material';
-import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +10,7 @@ export class UpdateService {
 
   currentVersion = '0.6';
 
-  constructor(private swUpdate: SwUpdate, private userService: UserService, private router: Router, private snackBar: MatSnackBar) {
+  constructor(private swUpdate: SwUpdate, private userService: UserService, private snackBar: MatSnackBar) {
     this.checkForUpdates();
 
     if (!this.userService.isLoggedIn()) {
@@ -58,6 +55,7 @@ export class UpdateService {
   private sync() {
     if (this.userService.isLoggedIn()) {
       this.userService.synchronization().then(() => {
+        localStorage.setItem('lastSync', new Date().toISOString());
         if (localStorage.getItem('syncState') === 'true') {
           setTimeout(() => { this.sync(); }, parseInt(localStorage.getItem('syncInterval'), 10));
         }
