@@ -3,10 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Md5 } from 'ts-md5/dist/md5';
 import { Observable, of } from 'rxjs';
 
-export interface UserSettings {
-  syncInterval: number;
-  syncState: boolean;
-  theme: string;
+export interface Account {
+  type: string;
+  login: string;
+  name: string;
+  surname: string;
+  update: Date;
+  childs: Account[];
 }
 
 export interface Exam {
@@ -75,29 +78,30 @@ export interface UserData {
   plan: Plan;
   grades: GradeLesson[];
   calendar: Calendar;
+  account: Account;
 }
 
 export class User {
   password: string; // MD5
   login: string;
   authentication: string;
-  public settings: UserSettings;
   public data: UserData;
 
   constructor(
       login: string = '',
       password: string = '',
       authentication: string = '',
-      settings: UserSettings = null,
       data: UserData = null) {
 
     this.login = login;
     this.password = password;
     this.authentication = authentication;
-    this.settings = settings === null ? {} as UserSettings : settings;
     if (data === null) {
       this.data = {} as UserData;
       this.data.plan = {} as Plan;
+      this.data.grades = [];
+      this.data.calendar = {} as Calendar;
+      this.data.account = {} as Account;
     } else {
       this.data = data;
     }
@@ -108,7 +112,6 @@ export class User {
       login: this.login,
       password: this.password,
       authentication: this.authentication,
-      settings: this.settings,
       data: this.data
     });
 
@@ -198,6 +201,7 @@ export class UserService {
         status: string;
         code: number;
         message: string;
+        account: Account;
       }
 
       // For headerInterceptor
@@ -217,8 +221,10 @@ export class UserService {
         if (result.code === 2) {
           reject(result);
         }
+
         // Create new user
         const newUser: User = new User(login, md5pass, btoa(login + ':' + code));
+        newUser.data.account = result.account;
         // DO NOT SAVE BEFORE SYNC
         // newUser.save();
         // Add user to array
@@ -302,7 +308,20 @@ export class UserService {
       for (let i = 0; i < this.users.length; i++) {
         // For headerInterceptor.ts
         localStorage.setItem('token', this.users[i].authentication);
-        this.http.post(this.gradesUrl, { login: this.users[i].login, pass: this.users[i].password }).subscribe((result: GradesResponse) => {
+        let data = {};
+        if (this.users[i].data.account.type === 'parent') {
+          data = {
+            child: this.users[i].data.account.childs[0].login,
+            login: this.users[i].login,
+            pass: this.users[i].password
+          };
+        } else {
+          data = {
+            login: this.users[i].login,
+            pass: this.users[i].password
+          };
+        }
+        this.http.post(this.gradesUrl, data).subscribe((result: GradesResponse) => {
           if (result.code !== 3) {
             reject(result.message);
           } else {
@@ -332,11 +351,23 @@ export class UserService {
       // Sync for all users
       for (let i = 0; i < this.users.length; i++) {
 
-        // console.log('Synchronizations started for ' + user.login);
         // For headerInterceptor.ts
         localStorage.setItem('token', this.users[i].authentication);
+        let data = {};
+        if (this.users[i].data.account.type === 'parent') {
+          data = {
+            child: 'S39_3PK847ZV8D3278',
+            login: this.users[i].login,
+            pass: this.users[i].password
+          };
+        } else {
+          data = {
+            login: this.users[i].login,
+            pass: this.users[i].password
+          };
+        }
 
-        this.http.post(this.planUrl, { login: this.users[i].login, pass: this.users[i].password }).subscribe((result: PlanResponse) => {
+        this.http.post(this.planUrl, data).subscribe((result: PlanResponse) => {
           if (result.code !== 3) {
             reject(result.message);
           } else {
