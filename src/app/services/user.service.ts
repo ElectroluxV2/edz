@@ -147,7 +147,7 @@ export class UserService {
         const saved: User = JSON.parse(localStorage.getItem(key));
 
         // Force to use constructor
-        const newUser = new User(saved.login, saved.password, saved.authentication, saved.settings, saved.data);
+        const newUser = new User(saved.login, saved.password, saved.authentication, saved.data);
 
         let add = true;
         for (let u of this.users) {
@@ -216,10 +216,12 @@ export class UserService {
           localStorage.removeItem('token');
           console.log('Removed token entry from localStorage');
           reject(result);
+          return;
         }
 
-        if (result.code === 2) {
+        if (result.code !== 3) {
           reject(result);
+          return;
         }
 
         // Create new user
@@ -356,7 +358,7 @@ export class UserService {
         let data = {};
         if (this.users[i].data.account.type === 'parent') {
           data = {
-            child: 'S39_3PK847ZV8D3278',
+            child: this.users[i].data.account.childs[0].login,
             login: this.users[i].login,
             pass: this.users[i].password
           };
