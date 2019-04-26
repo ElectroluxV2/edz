@@ -4,6 +4,16 @@
 
 @include mat-core();
 
+.light-brown-1 {
+  $light-primary: mat-palette($lightBrownPalleteA);
+  $light-accent: mat-palette($lightBrownPalleteB);
+  $light-warn: mat-palette($mat-red);
+  $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+  
+  @include angular-material-theme($light-theme);
+  @include component-themes($light-theme);
+}
+
 .red2 {
   $dark-primary: mat-palette($red2a);
   $dark-accent: mat-palette($red2b);
