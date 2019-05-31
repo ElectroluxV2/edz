@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material';
 })
 export class UpdateService {
 
-  currentVersion = '0.6';
+  currentVersion = '0.7';
 
   constructor(private swUpdate: SwUpdate, private userService: UserService, private snackBar: MatSnackBar) {
     this.checkForUpdates();
@@ -29,10 +29,8 @@ export class UpdateService {
         }
       }
     } else {
-      if (localStorage.getItem('version') === '0.5') {
+      if (localStorage.getItem('version') !== this.currentVersion) {
         localStorage.setItem('version', this.currentVersion);
-        // Need to relogin
-        this.userService.deleteUser(this.userService.users[0].login);
       }
       this.sync();
     }

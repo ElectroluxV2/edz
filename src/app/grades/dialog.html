@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{data.grade.grade}}</h2>
+<mat-dialog-content class="mat-typography">
+  <h3 lesson>{{data.lessonName}}</h3>
+  <div><b>Liczone do średniej: </b><span *ngIf="data.grade.average; else nie">Tak</span><br></div>
+  <div><b>Zajęcia indywidualne: </b><span *ngIf="data.grade.individual; else nie">Tak</span><br></div>
+  <div *ngIf="data.grade.value"><b>Wartość: </b>{{data.grade.value}}<br></div>
+  <div *ngIf="data.grade.weight"><b>Waga: </b>{{data.grade.weight}}<br></div>
+  <div *ngIf="data.grade.period"><b>Semestr: </b>{{data.grade.period}}<br></div>
+  <div *ngIf="data.grade.category"><b>Kategoria: </b>{{data.grade.category}}<br></div>
+  <div *ngIf="data.grade.description"><b>Opis: </b>{{data.grade.description}}<br></div>
+  <div *ngIf="data.grade.date"><b>Wystawiona: </b>{{data.grade.date}}<br></div>
+  <div *ngIf="data.grade.issuer"><b>Przez: </b>{{data.grade.issuer}}<br></div>
+
+  <ng-template #nie>
+    Nie
+  </ng-template>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>:c</button>
+</mat-dialog-actions>

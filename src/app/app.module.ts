@@ -33,15 +33,14 @@ import { LoginComponent } from './login/login.component';
 import { Routes, RouterModule } from '@angular/router';
 import { HeaderInterceptor } from './services/headerInterceptor';
 import { GuardService } from './services/guardService';
-import { OverlayContainer } from '@angular/cdk/overlay';
 import { SettingsComponent } from './settings/settings.component';
 import { GradesComponent } from './grades/grades.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { CalendarDialogComponent } from './calendar/dialog';
+import { GradesDialogComponent } from './grades/dialog';
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
 import localePlExtra from '@angular/common/locales/extra/pl';
-
 registerLocaleData(localePl, 'pl-PL', localePlExtra);
 
 
@@ -63,11 +62,13 @@ const appRoutes: Routes = [
     LoginComponent,
     SettingsComponent,
     GradesComponent,
+    GradesDialogComponent,
     CalendarComponent,
     CalendarDialogComponent
   ],
   entryComponents: [
-    CalendarDialogComponent
+    CalendarDialogComponent,
+    GradesDialogComponent
   ],
   imports: [
     MatSlideToggleModule,

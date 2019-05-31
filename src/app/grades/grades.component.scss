@@ -1,0 +1,39 @@
+@import '~@angular/material/theming';
+
+@mixin grades-theme($theme) {
+    $accent: map-get($theme, accent);
+    $primary: map-get($theme, primary);
+    $warn: map-get($theme, warn);
+
+    .mat-expansion-panel-body {
+        background-color: mat-color($primary, 900) !important;
+    }
+
+    .gradesContent {
+
+        margin-left: 8px;
+        margin-right: 8px;
+        h3[matLine] {
+            color: mat-color($accent, 200) !important;
+            margin-bottom: 0;
+            margin-top: 8px;
+        }
+
+        .mat-grid-tile {
+            color: mat-color($accent, 200) !important;
+        }
+    }
+
+    .grade {
+        width: 10vw;
+        height: 10vw;
+        text-align: center;
+        line-height: 10vw;
+        border: 2px solid;
+        border-color: mat-color($accent, 800) !important;
+        background-color: mat-color($primary, 600) !important;
+        border-radius: 10%;
+        text-overflow:ellipsis;
+        overflow: hidden;
+    }
+}

@@ -1,25 +1,31 @@
-<div *ngFor="let user of users | async">
+<div *ngFor="let user of users | async; index as userIndex">
     <mat-list>
       <article *ngIf="(users | async)?.length > 1">
         <h3 matSubheader>{{user.login}}</h3>
       </article>
-      <div *ngFor="let lesson of user.data.grades; index as i">
+      <div *ngFor="let lesson of user.data.grades; index as lessonIndex">
         <article>
-        <h3 matSubheader (click)="states[i] = !states[i]">{{lesson.name}}</h3>
-        <mat-expansion-panel [expanded]="states[i]">
+        <h3 matSubheader (click)="states[lessonIndex] = !states[lessonIndex]">{{lesson.name}}</h3>
+        <mat-expansion-panel [expanded]="states[lessonIndex]">
           <mat-expansion-panel-header>
           </mat-expansion-panel-header>
 
-          <mat-list>
-            <mat-list-item matRipple *ngFor="let grade of lesson.grades">
-              <h4 matLine><b>{{grade.grade}}</b></h4>
-              <p matLine>{{grade.category}}</p>
-              <p matLine>{{grade.description}}</p>
-              <p matLine>{{grade.date}}</p>
-              <p matLine>{{grade.issuer}}</p>
-              <mat-divider></mat-divider>
-            </mat-list-item>
-          </mat-list>
+          <mat-grid-list class="gradesContent" cols="7" rowHeight="1:1">
+            <h3 matLine>I semestr</h3>
+            <div *ngFor="let grade of lesson.grades; index as gradeIndex">
+              <mat-grid-tile *ngIf="grade.period==1">
+                <article matRipple class="grade" (click)="show(userIndex, lessonIndex, gradeIndex)">{{grade.grade}}</article>
+              </mat-grid-tile>
+            </div>
+          </mat-grid-list>
+          <mat-grid-list class="gradesContent" cols="7" rowHeight="1:1">
+            <h3 matLine>II semestr</h3>
+            <div *ngFor="let grade of lesson.grades; index as gradeIndex">
+              <mat-grid-tile *ngIf="grade.period==2">
+                <article matRipple class="grade" (click)="show(userIndex, lessonIndex, gradeIndex)">{{grade.grade}}</article>
+              </mat-grid-tile>
+            </div>
+          </mat-grid-list>
 
         </mat-expansion-panel>
         </article>
