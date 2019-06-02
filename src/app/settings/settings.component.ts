@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { MatSelectChange } from '@angular/material/select';
-import { MatSlideToggleChange } from '@angular/material';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { UserService, User } from '../services/user.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User, UserService, Exam, Homework } from '../services/user.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { CalendarDialogComponent } from './dialog';
 
 interface Month {
