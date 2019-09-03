@@ -5,6 +5,11 @@
     $primary: map-get($theme, primary);
     $warn: map-get($theme, warn);
 
+    h1 {
+        color: mat-color($accent, 200) !important;
+        text-align: center;
+    }
+
     .mat-expansion-panel-body {
         background-color: mat-color($primary, 900) !important;
     }

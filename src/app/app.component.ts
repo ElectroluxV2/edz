@@ -12,11 +12,11 @@ import { DOCUMENT } from '@angular/common';
 
 
 export class AppComponent {
-  constructor(private update: UpdateService,
+  constructor(private updateService: UpdateService,
               private userService: UserService,
               private overlayContainer: OverlayContainer,
               @Inject(DOCUMENT) private document: Document) {
-    this.update.checkForUpdates();
+    this.updateService.checkForUpdates();
 
     const theme = localStorage.getItem('theme');
 

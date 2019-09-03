@@ -3,6 +3,7 @@
       <article *ngIf="(users | async)?.length > 1">
         <h3 matSubheader>{{user.login}}</h3>
       </article>
+      <h1 *ngIf="user.data.grades">Brak ocen!</h1>
       <div *ngFor="let lesson of user.data.grades; index as lessonIndex">
         <article>
         <h3 matSubheader (click)="states[lessonIndex] = !states[lessonIndex]">{{lesson.name}}</h3>
