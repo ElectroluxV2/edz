@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { UpdateService } from './services/update.service';
 import { UserService } from './services/user.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
@@ -10,8 +10,7 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./app.component.scss']
 })
 
-
-export class AppComponent {
+export class AppComponent implements OnInit {
   constructor(private updateService: UpdateService,
               private userService: UserService,
               private overlayContainer: OverlayContainer,

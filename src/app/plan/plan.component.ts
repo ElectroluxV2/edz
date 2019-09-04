@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { UserService, User } from '../services/user.service';
 import { Observable } from 'rxjs';
+import { takeWhile } from 'rxjs/internal/operators/takeWhile';
 
 @Component({
   selector: 'app-plan',
@@ -8,7 +9,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./plan.component.scss']
 })
 
-export class PlanComponent implements OnInit, OnDestroy {
+export class PlanComponent implements OnDestroy {
+  alive = true;
   users: Observable<User[]>;
   states: boolean[] = [];
   empty: boolean[] = [];
@@ -16,7 +18,9 @@ export class PlanComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService) {
     this.users = this.userService.getUsers().pipe();
 
-    this.users.subscribe((users: User[]) => {
+    this.users
+    .pipe(takeWhile(() => this.alive))
+    .subscribe((users: User[]) => {
       for (const user of users) {
 
         // True if there is no lessions in that day
@@ -55,11 +59,7 @@ export class PlanComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-
-  }
-
   ngOnDestroy(): void {
-
+    this.alive = false;
   }
 }

@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { User, UserService, Exam, Homework } from '../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarDialogComponent } from './dialog';
+import { takeWhile } from 'rxjs/internal/operators/takeWhile';
+
 
 interface Month {
   text: string;
@@ -21,12 +23,15 @@ interface Day {
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnDestroy {
+  alive = true;
   users: User[] = [];
   months: Month[] = [];
 
   constructor(private userService: UserService, public dialog: MatDialog) {
-    this.userService.getUsers().subscribe( users => {
+    this.userService.getUsers()
+    .pipe(takeWhile(() => this.alive))
+    .subscribe( users => {
       this.users = users as User[];
     });
 
@@ -132,10 +137,11 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  ngOnInit() { }
-
   private datePartialEquality(one: Date, two: Date) {
     return ((one.getDate() === two.getDate()) && (one.getMonth() === two.getMonth()) && (one.getFullYear() === two.getFullYear()));
   }
 
+  ngOnDestroy(): void {
+    this.alive = false;
+  }
 }
