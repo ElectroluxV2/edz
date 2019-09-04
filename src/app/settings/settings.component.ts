@@ -6,7 +6,6 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { UserService, User } from '../services/user.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { UpdateService } from '../services/update.service';
 
 @Component({
   selector: 'app-settings',
