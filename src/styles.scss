@@ -1,8 +1,9 @@
 @import '~@angular/material/theming';
 @import './styles/material-theme';
 
-body { 
+body, html, .app-frame { 
     font-family: Roboto, "Helvetica Neue", sans-serif;
     margin: 0px;
+    height: 100%;
     background-color: #341717;
 }

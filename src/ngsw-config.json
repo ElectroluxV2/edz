@@ -27,10 +27,10 @@
   "dataGroups": [
     {
       "name": "api",
-      "urls": ["https://edz.budziszm.pro-linuxpl.com/api.php*"],
+      "urls": ["https://api.edziennik.ga*"],
       "cacheConfig": {
         "maxSize": 100,
-        "maxAge": "3d",
+        "maxAge": "1d",
         "timeout": "1m",
         "strategy": "freshness"
       }

@@ -14,6 +14,15 @@
         background-color: mat-color($primary, 900) !important;
     }
 
+    .mat-content {
+        white-space: nowrap;
+        display: inline-block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 48px;
+        line-height: 48px;
+    }
+
     .gradesContent {
 
         margin-left: 8px;
@@ -22,6 +31,7 @@
             color: mat-color($accent, 200) !important;
             margin-bottom: 0;
             margin-top: 8px;
+            font-size: 1.7em;
         }
 
         .mat-grid-tile {
@@ -40,5 +50,14 @@
         border-radius: 10%;
         text-overflow:ellipsis;
         overflow: hidden;
+    }
+
+    i {
+        font-size: 1.5em;
+        color: mat-color($accent, 200) !important;
+    }
+
+    .bt {
+        margin-bottom: 3.2em;
     }
 }

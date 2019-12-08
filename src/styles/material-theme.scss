@@ -5,122 +5,218 @@
 @include mat-core();
 
 .light-brown-1 {
-  $light-primary: mat-palette($lightBrownPalleteA);
-  $light-accent: mat-palette($lightBrownPalleteB);
-  $light-warn: mat-palette($mat-red);
-  $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+  $primary: mat-palette($lightBrownPalleteA);
+  $accent: mat-palette($lightBrownPalleteB);
+  $warn: mat-palette($mat-red);
+  $theme: mat-light-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($light-theme);
-  @include component-themes($light-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
 
 .red2 {
-  $dark-primary: mat-palette($red2a);
-  $dark-accent: mat-palette($red2b);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($red2a);
+  $accent: mat-palette($red2b);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
 
 .purple2 {
-  $dark-primary: mat-palette($purple2a);
-  $dark-accent: mat-palette($purple2b);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($purple2a);
+  $accent: mat-palette($purple2b);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
 
 .brown1 {
-  $dark-primary: mat-palette($brown1a);
-  $dark-accent: mat-palette($brown1b);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($brown1a);
+  $accent: mat-palette($brown1b);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
 
 .brown2 {
-  $dark-primary: mat-palette($brown2a);
-  $dark-accent: mat-palette($brown2b);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($brown2a);
+  $accent: mat-palette($brown2b);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
 
 .kn-blue {
-  $dark-primary: mat-palette($kn7a);
-  $dark-accent: mat-palette($kn7b);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($kn7a);
+  $accent: mat-palette($kn7b);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
 
 
 .blackngray {
-  $dark-primary: mat-palette($black);
-  $dark-accent: mat-palette($gray);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($black);
+  $accent: mat-palette($gray);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
 
 .kn-red {
-  $dark-primary: mat-palette($kn18a);
-  $dark-accent: mat-palette($kn19b);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($kn18a);
+  $accent: mat-palette($kn19b);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
 
 .kn-green-1 {
-  $dark-primary: mat-palette($kn20a);
-  $dark-accent: mat-palette($kn21b);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($kn20a);
+  $accent: mat-palette($kn21b);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
 
 .kn-green-2 {
-  $dark-primary: mat-palette($kn20a);
-  $dark-accent: mat-palette($kn20b);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($kn20a);
+  $accent: mat-palette($kn20b);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
 
 .kn-green-3 {
-  $dark-primary: mat-palette($kn21a);
-  $dark-accent: mat-palette($kn21b);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($kn21a);
+  $accent: mat-palette($kn21b);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+ $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
 }
 
 .kn-purple-13 {
-  $dark-primary: mat-palette($kn13a);
-  $dark-accent: mat-palette($kn13b);
-  $dark-warn: mat-palette($mat-red);
-  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+  $primary: mat-palette($kn13a);
+  $accent: mat-palette($kn13b);
+  $warn: mat-palette($mat-red);
+  $theme: mat-dark-theme($primary, $accent, $warn);
   
-  @include angular-material-theme($dark-theme);
-  @include component-themes($dark-theme);
+  @include angular-material-theme($theme);
+  @include component-themes($theme);
+  $swal2-background: mat-color($accent, 900);
+  $swal2-question: mat-color($primary, 800);
+  $swal2-title-color: mat-color($accent, 100);
+  $swal2-content-color: mat-color($accent, 100);
+  $swal2-validation-message-background: mat-color($primary, 800);
+  $swal2-validation-message-color: mat-color($accent, 100);
+  $swal2-white: mat-color($accent, 900);
+  @import '~sweetalert2/src/sweetalert2.scss';
 }
+

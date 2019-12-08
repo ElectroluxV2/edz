@@ -1,5 +1,5 @@
 
-  <mat-card>
+  <mat-card [ngClass]="{'bt': is}">
     <mat-card-header>
         <div mat-card-avatar><i class="material-icons">fingerprint</i></div>
         <mat-card-title>Logowanie</mat-card-title>
@@ -9,28 +9,82 @@
     <mat-card-content>
 
       <mat-form-field>
-        <input [disabled]="loading" required matInput placeholder="Podaj login" [(ngModel)]="login">
+        <input #lpt [disabled]="loading" required matInput placeholder="Podaj login" [(ngModel)]="login">
         <mat-error *ngIf="loginError">
             Podaj prawidłowy login
         </mat-error>
       </mat-form-field>
 
       <mat-form-field>
-        <input [disabled]="loading" required matInput placeholder="Wprowadź swoje hasło" [type]="hide ? 'text' : 'password'" [(ngModel)]="password">
+        <input #ppt [disabled]="loading" required matInput placeholder="Podaj swoje hasło" [type]="hide ? 'text' : 'password'" [(ngModel)]="password">
         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         <mat-error *ngIf="passwordError">
             Podaj prawidłowe hasło
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <input [disabled]="loading" matInput placeholder="Kod dostępu" [(ngModel)]="code">
-        <mat-error *ngIf="codeError">
-            Podany kod nie istnieje
-        </mat-error>
-      </mat-form-field>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header collapsedHeight="1.4em" expandedHeight="1.4em">
+
+          <mat-panel-title>
+            Regulamin
+          </mat-panel-title>
+          
+        </mat-expansion-panel-header>
+      
+
+        <h5>Regulamin korzystania z usługi</h5>
+        <ol>
+          <li>Postanowienia ogólne
+            <ul>
+              <li>Aplikacją (Aplikacja) w rozumieniu niniejszego Regulaminu jest oprogramowanie przystosowane do zapisania w pamięci Urządzeń Mobilnych, będące nakładką graficzną „SYSTEM ED - PLATFORMA MIEJSKA”.</li>
+              <li>Urządzeniem mobilnym jest (przenośne) urządzenie elektroniczne pozwalające na przetwarzanie, odbieranie oraz wysyłanie danych bez konieczności utrzymywania przewodowego połączenia z Internetem np. smartphone (Urządzenie Mobilne).</li>
+              <li>Użytkownikiem w rozumieniu niniejszego Regulaminu jest osoba fizyczna, która zainstalowała Aplikację na swoim smartfonie Urządzeniu Mobilnym (Użytkownik).</li>
+              <li>Korzystanie przez Użytkownika z Aplikacji wymaga uprzedniego zaakceptowania przez Użytkownika warunków niniejszego Regulaminu oraz zobowiązania się do ich przestrzegania. Akceptacja odbywa się podczas pierwszego logowania się w Aplikacji.</li>
+              <li>Każdorazowa zmiana Regulaminu korzystania z Aplikacji wymaga ponownej jego akceptacji przez Użytkownika podczas uruchamiania zaktualizowanej wersji Aplikacji. Brak akceptacji Regulaminu wiąże się z brakiem możliwości logowania do Aplikacji.</li>
+              <li>Akceptując Regulamin, Użytkownik Aplikacji wyraża zgodę na przechowywanie na swoim urządzeniu następujących danych: zaszyfrowane dane logowania do platformy miejskiej, wszystkich informacji z zakresu wyników w nauce użytkownika.</li>
+            </ul>
+          </li>
+          <li>Instalacja
+            <ul>
+              <li>Aplikacja dostępna jest do pobrania tylko i wyłącznie poprzez stronę internetową https://edziennik.ga</li>
+              <li>Korzystanie z Aplikacji możliwe jest na urządzeniach obsługujących technologię Progressive Web Apps.</li>
+              <li>W celu instalacji Aplikacji, należy zezwolić urządzeniu na dodanie witryny do ekranu startowego.</li>
+              <li>Korzystanie z Aplikacji jest bezpłatne. Użytkownik Aplikacji może ponosić koszty połączenia internetowego zgodnie z taryfą swojego operatora telefonii komórkowej.</li>
+              <li>Zastrzega się, iż tylko i wyłącznie najnowsza wersja aplikacji będzie wspierana oraz tylko najnowsza wersja zapewni prawidłowe działanie.</li>
+            </ul>
+          </li>
+          <li>Logowanie
+            <ul>
+              <li>Podczas pierwszego uruchomienia Aplikacji dokonywane jest logowanie do Aplikacji.</li>
+              <li>W procesie logowania Użytkownik w kolejności proszony jest o podanie loginu oraz hasła do platformy miejskiej.</li>
+              <li>Logowanie wykonuje się jednorazowo dla każdego Użytkownika.</li>
+              <li>Zastrzega się prawo do całkowitego zablokowania / usunięcia Użytkownika z Aplikacji, w dowolnej chwili bez uprzedniego podania powodu.</li>
+            </ul>
+          </li>
+          <li>Funkcjonalności
+            <ul>
+              <li>Aplikacja umożliwia Użytkownikowi w szczególności: podgląd aktualnych ocen, planu zajęć, spóźnień, nieobecności, zadanych prac domowych, sprawdzianów, uwag zachowania. Ponad to pozwala na wygodne usprawiedliwianie dni nieobecnych oraz wysyła powiadomienia „push" o aktualizacji bazdy danych systemu.</li>
+            </ul>
+          </li>
+          <li>Pozostałe
+            <ul>
+              <li>Oświadcza się, iż autor aplikacji posiada wszelkie prawa do aplikacji jak i witryny internetowej https://edziennik.ga, wszelkie próby rozpowszechniania aplikacji bądź udostępniania jakichkolwiek danych wygenerowanych przez Aplikację jest zabronione, za wyjątkiem zgody autora (Mateusz Budzisz ElectroluxV2@gmail.com).</li>
+              <li>Aby zapewnić poprawną funkcjonalność Aplikacja magazynuje dane Użytkownika na serwerze zewnętrznym. Dane nie są wykorzystywane w żaden inny sposób niż jest to konieczne do poprawnego działania Aplikacji.</li>
+              <li>Użytkownik ma prawo zażądać usunięcia wszystkich zgromadzonych danych przez Aplikacje poprzez wylogowanie się z Aplikacji.</li>
+              <li>Aplikacja jest nakładką graficzną na istniejący system platformy miejskiej i powstała w celu poprawy komfortu użytkowania platformy na urządzeniach elektronicznych.</li>
+              <li>Autor aplikacji jak i sama Aplikacja nie są w żaden sposób powiązani z firmą COMARCH.</li>
+            </ul>
+          </li>
+        </ol>
+      
+      </mat-expansion-panel>
 
     </mat-card-content>
+
+    <mat-card-footer>
+      <small>&copy; Mateusz Budzisz</small>
+    </mat-card-footer>
 
     <mat-card-actions>
       <button [disabled]="loading" mat-button (click)="tryLogin();">Zaloguj</button>

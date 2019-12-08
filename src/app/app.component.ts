@@ -1,8 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { UpdateService } from './services/update.service';
 import { UserService } from './services/user.service';
-import { OverlayContainer } from '@angular/cdk/overlay';
-import { DOCUMENT } from '@angular/common';
+import { ThemeService } from './services/theme.service';
+import { Component, OnInit } from '@angular/core';
+import { UpdateService } from './services/update.service';
 
 @Component({
   selector: 'app-root',
@@ -11,24 +10,15 @@ import { DOCUMENT } from '@angular/common';
 })
 
 export class AppComponent implements OnInit {
-  constructor(private updateService: UpdateService,
-              private userService: UserService,
-              private overlayContainer: OverlayContainer,
-              @Inject(DOCUMENT) private document: Document) {
+  constructor(private updateService: UpdateService, private userService: UserService, private themeService: ThemeService) {
     this.updateService.checkForUpdates();
-
-    const theme = localStorage.getItem('theme');
-
-    // Override
-    this.document.body.classList.value = theme;
-    this.overlayContainer.getContainerElement().classList.value = 'cdk-overlay-container ' + theme;  }
-
-  isLoggedIn() {
-    return this.userService.isLoggedIn();
   }
 
-  ngOnInit() {
-    // Dirty fix for white background on iOS
-    document.body.style.backgroundColor = window.getComputedStyle(this.document.getElementsByClassName('app-frame')[0]).backgroundColor;
+  get showMenu(): Boolean {
+    return this.userService.isAnyoneLoggedIn;
+  }
+
+  ngOnInit(): void {
+    this.themeService.load();
   }
 }

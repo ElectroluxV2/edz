@@ -1,196 +1,372 @@
-import { Injectable } from '@angular/core';
+import { SettingsData } from './../settings/settingsData.interface';
 import { HttpClient } from '@angular/common/http';
+import { Injectable, OnDestroy, HostListener } from '@angular/core';
+import { takeWhile } from 'rxjs/internal/operators/takeWhile';
+import { environment } from 'src/environments/environment';
 import { Md5 } from 'ts-md5/dist/md5';
-import { Observable, of } from 'rxjs';
+import { PlanData, Plan } from '../plan/planData.interface';
+import { Observable } from 'rxjs/internal/Observable';
+import { of } from 'rxjs/internal/observable/of';
+import { GradesData, GradeLesson } from '../grades/gradesData.interface';
 
-export interface Account {
-  type: string;
-  login: string;
-  name: string;
-  surname: string;
-  update: Date;
-  childs: Account[];
-}
-
-export interface Exam {
-  school: string;
-  group: string;
-  category: string;
-  type: string;
-  location: string;
-  lesson: string;
-  subject: string;
-  target: string;
-  info: string;
-  dateStart: string;
-  dateEnd: string;
-  dateAdded: string;
-  issuer: string;
-}
-
-export interface Homework {
-  school: string;
-  group: string;
-  lesson: string;
-  info: string;
-  dateEnd: string;
-}
-
-export interface Calendar {
-  exams: Exam[];
-  homeworks: Homework[];
-}
-
-export interface Lesson {
-  name: string;
-  time: string;
-  teacher: string;
-  empty: boolean;
-}
-
-export interface Plan {
-  monday: Lesson[];
-  tuesday: Lesson[];
-  wednesday: Lesson[];
-  thursday: Lesson[];
-  friday: Lesson[];
-}
-
-export interface Grade {
-  category: string;
-  grade: string;
-  value: string;
-  weight: number;
-  period: number;
-  average: boolean;
-  individual: boolean;
-  description: string;
-  date: string;
-  issuer: string;
-}
-
-export interface GradeLesson {
-  name: string;
-  grades: Grade[];
-}
-
-export interface UserData {
-  plan: Plan;
-  grades: GradeLesson[];
-  calendar: Calendar;
-  account: Account;
+export enum AccountType {
+  parent = 'parent',
+  child = 'child',
 }
 
 export class User {
-  password: string; // MD5
+  password_md5: string;
   login: string;
-  authentication: string;
-  public data: UserData;
+  accountType: AccountType;
+  lastUpdate: Date;
+  userName: string;
+  school: string | null;
+  name: string | null;
+  surname: string | null;
+  child: null | {
+    login: string;
+    name: string;
+    surname: string;
+    school: string;
+  };
+  public plan: Plan;
+  public grades: GradeLesson[];
 
-  constructor(
-      login: string = '',
-      password: string = '',
-      authentication: string = '',
-      data: UserData = null) {
-
+  constructor(login: string, password_md5: string) {
     this.login = login;
-    this.password = password;
-    this.authentication = authentication;
-    if (data === null) {
-      this.data = {} as UserData;
-      this.data.plan = {} as Plan;
-      this.data.grades = [];
-      this.data.calendar = {} as Calendar;
-      this.data.account = {} as Account;
-    } else {
-      this.data = data;
-    }
+    this.password_md5 = password_md5;
   }
 
   save() {
     const json = JSON.stringify({
       login: this.login,
-      password: this.password,
-      authentication: this.authentication,
-      data: this.data
-    });
+      password_md5: this.password_md5,
+      accountType: this.accountType,
+      lastUpdate: this.lastUpdate,
+      userName: this.userName,
+      school: this.school,
+      name: this.name,
+      surname: this.surname,
+      child: this.child,
+      plan: this.plan,
+      grades: this.grades,
+    });    
 
-    localStorage.setItem('user-' + this.login, json);
+    const md5 = new Md5();
+    const hash: string = md5.appendStr(this.login).end().toString();
+
+    localStorage.setItem('user-' + hash, json);
   }
 }
 
 @Injectable({
   providedIn: 'root'
 })
+export class UserService implements OnDestroy {
+  protected alive = true;
+  protected users: User[] = [];
+  protected loginUrl = 'https://api.edziennik.ga/login';
+  protected gradesUrl = 'https://api.edziennik.ga/grades';
+  protected planUrl = 'https://api.edziennik.ga/lessonPlan';
+  protected calendarUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/calendar';
 
-export class UserService {
-  users: User[] = [];
-  loginUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/login';
-  planUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/plan';
-  gradesUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/grades';
-  calendarUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/calendar';
+  protected plans: PlanData[] = [];
+  protected grades: GradesData[] = [];
+  private settings: SettingsData[] = [];
+
   constructor(private http: HttpClient) {
-    this.loadSavedUsers();
-  }
+    console.log('User service');
+    // Load users
 
-  getUsers(): Observable<User[]> {
-    // Required by multi instance
-    this.loadSavedUsers();
-    return of(this.users);
-  }
-
-  loadSavedUsers() {
-    // Load saved users
     const keys = Object.keys(localStorage);
     for (const key of keys) {
       if (key.includes('user-')) {
-        const saved: User = JSON.parse(localStorage.getItem(key));
+        const json = localStorage.getItem(key);
+        const saved = JSON.parse(json) as User;
 
-        // Force to use constructor
-        const newUser = new User(saved.login, saved.password, saved.authentication, saved.data);
-
-        let add = true;
-        for (let u of this.users) {
-          if (u.login === newUser.login) {
-            // Set
-            u = newUser;
-            add = false;
-            break;
-          }
+        // Add this user data
+        let name: string;
+        if (saved.accountType === AccountType.parent) {
+          name = saved.child.name;
+        } else {
+          name = saved.name;
         }
 
-        if (add) {
-          this.users.push(newUser);
-        }
+        this.plans.push({
+          userLogin: saved.login,
+          userName: name,
+          plan: saved.plan,
+        });
+
+        this.grades.push({
+          userLogin: saved.login,
+          userName: name,
+          grades: saved.grades,
+        });
+
+        this.settings.push({
+          userLogin: saved.login,
+          userName: saved.userName,
+          childName: (saved.child) ? (saved.child.name) : (null),
+          userType: saved.accountType,
+        });
+        
+        // We need to use native constructor
+        const user = new User(saved.login, saved.password_md5);
+        Object.assign(user, saved);
+        this.users.push(user);
       }
     }
+
+    //this.testReactive(1, 'up');
   }
 
-  // Return true if any user is logged in
-  isLoggedIn() {
-    this.loadSavedUsers(); // Can run in multiple instances
-    return (this.users.length) ? true : false;
+  get lastSync(): Date {
+    return new Date(localStorage.getItem('lastSync'));
   }
 
-  deleteUser(login: string) {
-    // Load users
-    this.loadSavedUsers();
+  set lastSync(date: Date) {
+    localStorage.setItem('lastSync', date.toString());
+  }
+
+  private testReactive(times: number, way: string) {
+
+    if (way === 'up') {
+      this.settings.push({
+        userLogin: 'L: '+times,
+        userName: 'N: '+times,
+        childName: (times%2==0) ? ('Child') : (null),
+        userType: (times%2==0) ? AccountType.parent : AccountType. child,
+      });
+      if (this.settings.length == 5) way = 'down';
+    } else {
+      if (this.settings.length == 2) way = 'up';
+      this.settings.pop();
+    }
+
+    setTimeout(() => { this.testReactive(++times, way) }, 50);
+    
+  }
+
+  get planData(): Observable<PlanData[]> {
+    return of(this.plans);
+  }
+
+  get gradesData(): Observable<GradesData[]> {
+    return of(this.grades);
+  }
+
+  get settingsData(): Observable<SettingsData[]> {
+    return of(this.settings);
+  }
+
+  get isAnyoneLoggedIn(): Boolean {
+    return (this.users.length > 0);
+  }
+
+  public deleteUser(login: string): void {
     // Remove from memory
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i].login === login) {
-        this.users.splice(i, 1);
-      }
+    if (this.users.some(u => u.login === login)) {
+      this.users.splice(this.users.findIndex(u => u.login === login), 1);
+    }
+    // Remove from data
+    if (this.settings.some(u => u.userLogin === login)) {
+      this.settings.splice(this.settings.findIndex(u => u.userLogin === login), 1);
+    }
+    if (this.plans.some(u => u.userLogin === login)) {
+      this.plans.splice(this.plans.findIndex(u => u.userLogin === login), 1);
+    }
+    if (this.grades.some(u => u.userLogin === login)) {
+      this.grades.splice(this.grades.findIndex(u => u.userLogin === login), 1);
     }
     // Remove from storage
-    localStorage.removeItem('user-' + login);
+    const keys = Object.keys(localStorage);
+    for (const key of keys) {
+      if (key.includes('user-')) {
+        const json = localStorage.getItem(key);
+        const saved = JSON.parse(json) as User;
+        if (saved.login === login) {
+          localStorage.removeItem(key);
+          return;
+        }
+      }
+    }
+    console.log(this.users);
+    
   }
 
-  loginUser(login: string, password: string, code: string) {
-    return new Promise((resolve, reject) => {
+  private async getPlan(user: User): Promise<{ message: string }> {
+    return new Promise<{ message: string }>((resolve, reject) => {
 
+      // Response from api
+      interface PlanResponse {
+        statusCode: number;
+        data: {
+          plan: Plan;
+        };
+        error: null | {
+          type: string;
+          description: string;
+        };
+      }
+
+      const data: any = {
+        login: user.login,
+        password_md5: user.password_md5
+      };
+
+      if (user.accountType === AccountType.parent) {
+        data.child = user.child.login;
+      }
+
+      this.http.post(this.planUrl, data)
+        .pipe(takeWhile(() => this.alive))
+        .subscribe((response: PlanResponse) => {
+
+          if (response.error) {
+            return reject({
+              message: response.error.description
+            });
+          }
+
+          user.plan = response.data.plan;
+
+          // Add this user data only if there is no such user, otherwise set data for this user
+          if (this.plans.some(d => d.userLogin === user.login)) {
+            this.plans.find(d => d.userLogin === user.login).plan = user.plan;
+          } else {
+            let name: string;
+            if (user.accountType === AccountType.parent) {
+              name = user.child.name;
+            } else {
+              name = user.name;
+            }
+
+            this.plans.push({
+              userLogin: user.login,
+              userName: name,
+              plan: user.plan,
+            });
+          }
+
+          return resolve({ message: 'Downloaded plan for ' + user.login });
+        });
+    });
+  }
+
+  private async getGrades(user: User): Promise<{ message: string }> {
+    return new Promise<{ message: string }>((resolve, reject) => {
+
+      // Response from api
+      interface GradesResponse {
+        statusCode: number;
+        data: {
+          grades: GradeLesson[];
+        };
+        error: null | {
+          type: string;
+          description: string;
+        };
+      }
+
+      const data: any = {
+        login: user.login,
+        password_md5: user.password_md5
+      };
+
+      if (user.accountType === AccountType.parent) {
+        data.child = user.child.login;
+      }
+
+      this.http.post(this.gradesUrl, data)
+        .pipe(takeWhile(() => this.alive))
+        .subscribe((response: GradesResponse) => {
+
+          if (response.error) {
+            return reject({
+              message: response.error.description
+            });
+          }
+
+          user.grades = response.data.grades;
+
+          // Add this user data only if there is no such user, otherwise set data for this user
+          if (this.grades.some(d => d.userLogin === user.login)) {
+            this.grades.find(d => d.userLogin === user.login).grades = user.grades;
+          } else {
+            let name: string;
+            if (user.accountType === AccountType.parent) {
+              name = user.child.name;
+            } else {
+              name = user.name;
+            }
+
+            this.grades.push({
+              userLogin: user.login,
+              userName: name,
+              grades: user.grades,
+            });
+          }
+
+          return resolve({ message: 'Downloaded grades for ' + user.login });
+        });
+    });
+  }
+
+  public async sync(options: {
+      onlyLatestUser: boolean;
+    } = {
+      onlyLatestUser: false
+    }): Promise<{ message: string }> {
+
+    return new Promise<{ message: string }>(async (resolve, reject) => {
+      const startIndex = (options.onlyLatestUser) ? (this.users.length - 1) : (0);
+      for await (const user of this.users.slice(startIndex)) {
+
+        if (!environment.production) {
+          console.time('sync');
+          console.timeLog('sync', 'Selected user ' + user.login);
+        }
+
+        await this.getPlan(user).catch((result: { message: string }) => {
+          return reject({
+            message: result.message
+          });
+        }).then((result: { message: string }) => {
+          if (!environment.production) {
+            console.timeLog('sync', result.message);
+          }
+        });
+
+        await this.getGrades(user).catch((result: { message: string }) => {
+          return reject({
+            message: result.message
+          });
+        }).then((result: { message: string }) => {
+          if (!environment.production) {
+            console.timeLog('sync', result.message);
+          }
+        });
+
+        // Save to memory and update observers
+        user.save();
+      }
+
+      if (!environment.production) {
+        console.timeEnd('sync');
+      }
+
+      this.lastSync = new Date();
+
+      resolve();
+    });
+  }
+
+  public async login(login: string, password: string): Promise<{ message: string }> {
+    return new Promise<{ message: string }>((resolve, reject) => {
       for (const user of this.users) {
         if (user.login === login) {
-          reject({
+          return reject({
             message: 'To konto już jest zalogowane'
           });
         }
@@ -198,190 +374,59 @@ export class UserService {
 
       // Response from api
       interface LoginResponse {
-        status: string;
-        code: number;
-        message: string;
-        account: Account;
+        statusCode: number;
+        data: {
+          userName: string;
+          accountType: AccountType;
+          lastUpdate: Date;
+          school: string | null;
+          name: string | null;
+          surname: string | null;
+          login: string;
+          child: null | {
+            login: string;
+            name: string;
+            surname: string;
+            school: string;
+          };
+        };
+        error: null | {
+          type: string;
+          description: string;
+        };
       }
-
-      // For headerInterceptor
-      localStorage.setItem('token',  btoa(login + ':' + code));
-
       const md5 = new Md5();
-      const md5pass: string = md5.appendStr(password).end().toString();
+      const password_md5: string = md5.appendStr(password).end().toString();
 
-      this.http.post(this.loginUrl, { login, pass: md5pass }).subscribe((result: LoginResponse) => {
-        // Remove token
-        if (result.code === 1) {
-          localStorage.removeItem('token');
-          console.log('Removed token entry from localStorage');
-          reject(result);
-          return;
-        }
-
-        if (result.code !== 3) {
-          reject(result);
-          return;
-        }
-
-        // Create new user
-        const newUser: User = new User(login, md5pass, btoa(login + ':' + code));
-        newUser.data.account = result.account;
-        // DO NOT SAVE BEFORE SYNC
-        // newUser.save();
-        // Add user to array
-        this.users.push(newUser);
-        resolve();
-      });
-    });
-  }
-
-  async synchronization() {
-    // Load from another instances
-    this.loadSavedUsers();
-
-    if (this.users.length === 0) {
-      console.warn('Trying to sync without user!');
-      return false;
-    }
-
-    const res1 = await this.getPlan().catch(() => {
-      return false;
-    });
-
-    const res2 = await this.getGrades().catch(() => {
-      return false;
-    });
-
-    const res3 = await this.getCalendar().catch(() => {
-      return false;
-    });
-
-    // Save for other instances
-    for (const user of this.users) {
-      user.save();
-    }
-
-    return true;
-  }
-
-  private getCalendar() {
-    return new Promise((resolve, reject) => {
-
-      interface CalendarResponse {
-        status: string;
-        code: number;
-        message: string;
-        calendar: Calendar;
-      }
-
-      // Sync for all users
-      for (let i = 0; i < this.users.length; i++) {
-        // For headerInterceptor.ts
-        localStorage.setItem('token', this.users[i].authentication);
-        this.http.post(this.calendarUrl, { login: this.users[i].login, pass: this.users[i].password }).subscribe((result: CalendarResponse) => {
-          if (result.code !== 3) {
-            reject(result.message);
-          } else {
-            // Save
-            this.users[i].data.calendar = result.calendar;
-            console.log('Successfully synced calendar for ' + this.users[i].login);
-            if (i === this.users.length - 1) {
-              resolve();
-            }
+      this.http.post(this.loginUrl, { login, password_md5 })
+        .pipe(takeWhile(() => this.alive))
+        .subscribe((response: LoginResponse) => {
+          if (response.error) {
+            return reject({
+              message: response.error.description
+            });
           }
+
+          // Create new user with gained data
+          const user = new User(login, password_md5);
+          const data = response.data as User;
+          Object.assign(user, data);
+
+          this.settings.push({
+            userLogin: user.login,
+            userName: user.userName,
+            childName: (user.child) ? (user.child.name) : (null),
+            userType: user.accountType,
+          });
+
+          // DO NOT SAVE BEFORE SYNC
+          this.users.push(user);
+          return resolve({ message: 'Logged in!' });
         });
-      }
     });
   }
 
-
-  private getGrades() {
-    return new Promise((resolve, reject) => {
-
-      interface GradesResponse {
-        status: string;
-        code: number;
-        message: string;
-        grades: GradeLesson[];
-      }
-
-      // Sync for all users
-      for (let i = 0; i < this.users.length; i++) {
-        // For headerInterceptor.ts
-        localStorage.setItem('token', this.users[i].authentication);
-        let data = {};
-        if (this.users[i].data.account.type === 'parent') {
-          data = {
-            child: this.users[i].data.account.childs[0].login,
-            login: this.users[i].login,
-            pass: this.users[i].password
-          };
-        } else {
-          data = {
-            login: this.users[i].login,
-            pass: this.users[i].password
-          };
-        }
-        this.http.post(this.gradesUrl, data).subscribe((result: GradesResponse) => {
-          if (result.code !== 3) {
-            reject(result.message);
-          } else {
-            // Save
-            this.users[i].data.grades = result.grades;
-            console.log('Successfully synced grades for ' + this.users[i].login);
-            if (i === this.users.length - 1) {
-              resolve();
-            }
-          }
-        });
-      }
-    });
-  }
-
-  private getPlan() {
-    return new Promise((resolve, reject) => {
-
-       // Response from api
-      interface PlanResponse {
-        status: string;
-        code: number;
-        message: string;
-        plan: Plan;
-      }
-
-      // Sync for all users
-      for (let i = 0; i < this.users.length; i++) {
-
-        // For headerInterceptor.ts
-        localStorage.setItem('token', this.users[i].authentication);
-        let data = {};
-        if (this.users[i].data.account.type === 'parent') {
-          data = {
-            child: this.users[i].data.account.childs[0].login,
-            login: this.users[i].login,
-            pass: this.users[i].password
-          };
-        } else {
-          data = {
-            login: this.users[i].login,
-            pass: this.users[i].password
-          };
-        }
-
-        this.http.post(this.planUrl, data).subscribe((result: PlanResponse) => {
-          if (result.code !== 3) {
-            reject(result.message);
-          } else {
-            // Save
-            this.users[i].data.plan = result.plan;
-            console.log('Successfully synced plan for ' + this.users[i].login);
-            if (i === this.users.length - 1) {
-              resolve();
-            }
-          }
-        });
-      }
-    });
+  ngOnDestroy(): void {
+    this.alive = false;    
   }
 }

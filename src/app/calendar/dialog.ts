@@ -1,11 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Exam, Homework } from '../services/user.service';
 
 export interface DialogData {
     date: Date;
-    exams: Exam[];
-    homeworks: Homework[];
+    //exams: Exam[];
+    //homeworks: Homework[];
 }
 
 @Component({

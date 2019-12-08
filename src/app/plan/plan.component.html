@@ -1,102 +1,82 @@
-<mat-list>
-<div *ngFor="let user of users | async; index as i">
-    <article *ngIf="(users | async)?.length > 1">
-        <h3 matSubheader (click)="states[0] = !states[0]">{{user.login}}</h3>
-    </article>
-
-    <article>
-    <h3 matSubheader (click)="states[0] = !states[0]">Poniedziałek</h3>
-    <mat-expansion-panel [expanded]="!states[0]">
-        <mat-expansion-panel-header></mat-expansion-panel-header>
-        <mat-list>
-            <mat-list-item *ngIf="empty[0]">
-                <h4 matLine>Brak lekcji</h4>
-            </mat-list-item>
-            <div *ngFor="let lesson of user.data.plan.monday; index as i">
-                <mat-list-item matRipple *ngIf="!lesson.empty" >
-                    <h4 matLine>{{lesson.name}}</h4>
-                    <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
-                    <mat-divider></mat-divider>
-                </mat-list-item>
-            </div>
-        </mat-list>
-    </mat-expansion-panel>
-    </article>
-
-    <article>
-    <h3 matSubheader (click)="states[1] = !states[1]">Wtorek</h3>
-    <mat-expansion-panel [expanded]="!states[1]">
-        <mat-expansion-panel-header></mat-expansion-panel-header>
-        <mat-list>
-            <mat-list-item *ngIf="empty[1]">
-                <h4 matLine>Brak lekcji</h4>
-            </mat-list-item>
-            <div *ngFor="let lesson of user.data.plan.tuesday; index as i">
-                <mat-list-item matRipple *ngIf="!lesson.empty" >
-                    <h4 matLine>{{lesson.name}}</h4>
-                    <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
-                    <mat-divider></mat-divider>
-                </mat-list-item>
-            </div>
-        </mat-list>
-    </mat-expansion-panel>
-    </article>
-
-    <article>
-    <h3 matSubheader (click)="states[2] = !states[2]">Środa</h3>
-    <mat-expansion-panel [expanded]="!states[2]">
-        <mat-expansion-panel-header></mat-expansion-panel-header>
-        <mat-list>
-            <mat-list-item *ngIf="empty[2]">
-                <h4 matLine>Brak lekcji</h4>
-            </mat-list-item>
-            <div *ngFor="let lesson of user.data.plan.wednesday; index as i">
-                <mat-list-item matRipple *ngIf="!lesson.empty" >
-                    <h4 matLine>{{lesson.name}}</h4>
-                    <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
-                    <mat-divider></mat-divider>
-                </mat-list-item>
-            </div>
-        </mat-list>
-    </mat-expansion-panel>
-    </article>
-
-    <article>
-    <h3 matSubheader (click)="states[3] = !states[3]">Czwartek</h3>
-    <mat-expansion-panel [expanded]="!states[3]">
-        <mat-expansion-panel-header></mat-expansion-panel-header>
-        <mat-list>
-            <mat-list-item *ngIf="empty[3]">
-                <h4 matLine>Brak lekcji</h4>
-            </mat-list-item>
-            <div *ngFor="let lesson of user.data.plan.thursday; index as i">
-                <mat-list-item matRipple *ngIf="!lesson.empty" >
-                    <h4 matLine>{{lesson.name}}</h4>
-                    <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
-                    <mat-divider></mat-divider>
-                </mat-list-item>
-            </div>
-        </mat-list>
-    </mat-expansion-panel>
-    </article>
-
-    <article>
-    <h3 matSubheader (click)="states[4] = !states[4]">Piątek</h3>
-    <mat-expansion-panel [expanded]="!states[4]">
-        <mat-expansion-panel-header></mat-expansion-panel-header>
-        <mat-list>
-            <mat-list-item *ngIf="empty[4]">
-                <h4 matLine>Brak lekcji</h4>
-            </mat-list-item>
-            <div *ngFor="let lesson of user.data.plan.friday; index as i">
-                <mat-list-item matRipple *ngIf="!lesson.empty" >
-                    <h4 matLine>{{lesson.name}}</h4>
-                    <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
-                    <mat-divider></mat-divider>
-                </mat-list-item>
-            </div>
-        </mat-list>
-    </mat-expansion-panel>
-    </article>
+<div class="bt">
+    <div *ngFor="let data of plans | async; index as i">
+        <article *ngIf="(plans | async)?.length > 1">
+            <h3 matSubheader>{{data.userName}}</h3>
+        </article>
+    
+        <article>
+        <mat-expansion-panel expanded="true">
+            <mat-expansion-panel-header collapsedHeight="48px" expandedHeight="48px">Poniedziałek</mat-expansion-panel-header>
+            <mat-list>
+                <div *ngFor="let lesson of data.plan.monday; index as i">
+                    <mat-list-item matRipple *ngIf="!lesson.empty" >
+                        <h4 matLine>{{lesson.name}}</h4>
+                        <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                </div>
+            </mat-list>
+        </mat-expansion-panel>
+        </article>
+    
+        <article>
+        <mat-expansion-panel expanded="true">
+            <mat-expansion-panel-header collapsedHeight="48px" expandedHeight="48px">Wtorek</mat-expansion-panel-header>
+            <mat-list>
+                <div *ngFor="let lesson of data.plan.tuesday; index as i">
+                    <mat-list-item matRipple *ngIf="!lesson.empty" >
+                        <h4 matLine>{{lesson.name}}</h4>
+                        <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                </div>
+            </mat-list>
+        </mat-expansion-panel>
+        </article>
+    
+        <article>
+        <mat-expansion-panel expanded="true">
+            <mat-expansion-panel-header collapsedHeight="48px" expandedHeight="48px">Środa</mat-expansion-panel-header>
+            <mat-list>
+                <div *ngFor="let lesson of data.plan.wednesday; index as i">
+                    <mat-list-item matRipple *ngIf="!lesson.empty" >
+                        <h4 matLine>{{lesson.name}}</h4>
+                        <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                </div>
+            </mat-list>
+        </mat-expansion-panel>
+        </article>
+    
+        <article>
+        <mat-expansion-panel expanded="true">
+            <mat-expansion-panel-header collapsedHeight="48px" expandedHeight="48px">Czwartek</mat-expansion-panel-header>
+            <mat-list>
+                <div *ngFor="let lesson of data.plan.thursday; index as i">
+                    <mat-list-item matRipple *ngIf="!lesson.empty" >
+                        <h4 matLine>{{lesson.name}}</h4>
+                        <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                </div>
+            </mat-list>
+        </mat-expansion-panel>
+        </article>
+    
+        <article>
+        <mat-expansion-panel expanded="true">
+            <mat-expansion-panel-header collapsedHeight="48px" expandedHeight="48px">Piątek</mat-expansion-panel-header>
+            <mat-list>
+                <div *ngFor="let lesson of data.plan.friday; index as i">
+                    <mat-list-item matRipple *ngIf="!lesson.empty" >
+                        <h4 matLine>{{lesson.name}}</h4>
+                        <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                </div>
+            </mat-list>
+        </mat-expansion-panel>
+        </article>
+    </div>
 </div>
-</mat-list>

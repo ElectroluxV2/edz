@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -6,83 +6,89 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  providers: [UserService]
+  styleUrls: ['./login.component.scss']
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   hide: boolean;
   login: string;
   password: string;
-  code: string;
   loginError = false;
   passwordError = false;
-  codeError = false;
   loading = false;
-
+  @ViewChild('lpt', {static: false}) lpt: ElementRef;
+  @ViewChild('ppt', {static: false}) ppt: ElementRef;
 
   constructor(private userService: UserService, private router: Router) { }
 
-  ngOnInit() {
+  tryLogin(): void {
 
-  }
+    this.loginError = false;
+    this.passwordError = false;
 
-  tryLogin() {
-
-    if ((!this.login)) {
+    if (!this.login) {
       this.loginError = true;
     }
 
-    if ((!this.password)) {
+    if (!this.password) {
       this.passwordError = true;
     }
 
-    if ((this.passwordError) || (this.loginError)) {
-      this.passwordError = false;
-      this.loginError = false;
+    if (this.passwordError || this.loginError) {
+
+      this.lpt.nativeElement.focus();
+      this.ppt.nativeElement.focus();
+      this.ppt.nativeElement.blur();
       return;
     }
 
     Swal.fire({
-      title: 'Kim jestes?',
+      title: 'Kim jesteś?',
       text: 'Weryfikujemy twoją tożsamość',
       type: 'question',
       allowOutsideClick: false,
     });
+
     this.loading = true;
     Swal.showLoading();
 
-    this.userService.loginUser(this.login, this.password, this.code).then(result => {
+    this.userService.login(this.login, this.password).then(() => {
+
       Swal.fire({
-        title: 'Już wiemy kim jesteś',
-        text: 'Teraz pobieramy Twoje dane żeby cię okraść',
+        title: 'Już wiemy kim jesteś!',
+        html: 'Teraz pobieramy twoje dane<br><s>żeby cię okraść</s>.',
         type: 'info',
         allowOutsideClick: false,
       });
       Swal.showLoading();
-      // Now sync
-      // Get data for all
-      this.userService.synchronization().then(() => {
-        Swal.hideLoading();
+
+      this.userService.sync({
+        onlyLatestUser: true,
+      }).then(() => {
+
         Swal.fire({
-          title: 'Już za pózno',
+          title: 'Już za późno.',
           text: 'Zalogowano!',
           type: 'success',
-          allowOutsideClick: true,
+          allowOutsideClick: false,
         }).then(() => {
-          this.loading = false;
           this.router.navigate(['plan']);
         });
-      }).catch((message) => {
+
+      }).catch((result: { message: string; }) => {
         this.loading = false;
         Swal.hideLoading();
-        Swal.showValidationMessage(message);
+        Swal.showValidationMessage(result.message);
       });
-    }).catch(result => {
+
+    }).catch((result: { message: string; }) => {
       this.loading = false;
       Swal.hideLoading();
       Swal.showValidationMessage(result.message);
     });
-    return;
+  }
+
+  get addMargin(): Boolean {
+    return this.userService.isAnyoneLoggedIn;
   }
 }

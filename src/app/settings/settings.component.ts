@@ -1,32 +1,35 @@
+import { ThemeService } from './../services/theme.service';
+import { SettingsData } from './settingsData.interface';
 import { Component, OnInit, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-import { OverlayContainer } from '@angular/cdk/overlay';
 import { MatSelectChange } from '@angular/material/select';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { UserService, User } from '../services/user.service';
-import { Observable } from 'rxjs';
+import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.sass']
+  styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
-  users: Observable<User[]>;
-  lastSync: Date;
-  syncInterval: string;
-  syncState: boolean;
-  themeSelected: string;
+  protected users: Observable<SettingsData[]>;
+  public syncInProgress: Boolean = false;
+
+  get themeSelected(): string {
+    return this.themeService.currentTheme;
+  }
+
+  get lastSync(): Date {
+    return this.userService.lastSync;
+  }
+
+  get syncState(): Boolean {
+    return (localStorage.getItem('syncState') === 'true');
+  }
 
   changeTheme(event: MatSelectChange) {
-    // Override
-    this.document.body.classList.value = event.value;
-    this.overlayContainer.getContainerElement().classList.value = 'cdk-overlay-container ' + event.value;
-    // Dirty fix for white background on iOS
-    document.body.style.backgroundColor = window.getComputedStyle(this.document.getElementsByClassName('app-frame')[0]).backgroundColor;
-    // Save
-    localStorage.setItem('theme', event.value);
+    this.themeService.changeTheme(event.value);
   }
 
   changeInterval(event: MatSelectChange) {
@@ -36,35 +39,27 @@ export class SettingsComponent implements OnInit {
 
   changeSyncState(event: MatSlideToggleChange) {
      // Save
-     this.syncState = event.checked;
      localStorage.setItem('syncState', event.checked.toString());
   }
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private overlayContainer: OverlayContainer,
-    private userService: UserService,
-    private router: Router) {
-
-    this.themeSelected = localStorage.getItem('theme');
-    this.syncState = (localStorage.getItem('syncState') === 'true');
-    this.syncInterval = localStorage.getItem('syncInterval');
-    this.users = this.userService.getUsers().pipe();
-    this.lastSync = new Date(localStorage.getItem('lastSync'));
-    this.calcTimeToSync();
+  constructor(private userService: UserService,private themeService: ThemeService, private router: Router) {
+    this.users = this.userService.settingsData.pipe();
   }
 
   deleteUser(login: string) {
-    this.userService.deleteUser(login);
-    // Router to login
-    if (!this.userService.isLoggedIn()) {
+    this.userService.deleteUser(login); 
+    // App'll break without user
+    if (!this.userService.isAnyoneLoggedIn) {
       this.router.navigate(['login']);
     }
   }
 
-  calcTimeToSync() {
-    this.lastSync = new Date(localStorage.getItem('lastSync'));
-    setTimeout(() => { this.calcTimeToSync(); }, 5000);
+  sync() {
+    this.syncInProgress = true;
+    this.userService.sync().then(() => {
+      this.syncInProgress = false;
+      console.log('after');
+    });
   }
 
   addUser() {

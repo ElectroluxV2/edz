@@ -1,0 +1,27 @@
+.ct {
+    ::ng-deep .mat-button-wrapper {
+        margin-left: -8px;
+    }
+}
+
+.bt {
+    margin-bottom: 3.2em;
+}
+
+.acc {
+    font-size: inherit;
+    font-weight: 500 !important;
+    margin-top: -3px !important;
+    small {
+        display: block;
+        font-weight: 300 !important;
+        font-size: 0.6em;
+        margin-top: -3px !important;
+    }
+
+    sup {
+        .parent-indicator {
+            font-size: 0.6em;
+        }
+    }
+}

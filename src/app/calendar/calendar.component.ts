@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { User, UserService, Exam, Homework } from '../services/user.service';
+import { User, UserService } from '../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarDialogComponent } from './dialog';
 import { takeWhile } from 'rxjs/internal/operators/takeWhile';
@@ -28,7 +28,7 @@ export class CalendarComponent implements OnDestroy {
   users: User[] = [];
   months: Month[] = [];
 
-  constructor(private userService: UserService, public dialog: MatDialog) {
+  constructor(private userService: UserService, public dialog: MatDialog) {/*
     this.userService.getUsers()
     .pipe(takeWhile(() => this.alive))
     .subscribe( users => {
@@ -100,10 +100,10 @@ export class CalendarComponent implements OnDestroy {
         current: this.datePartialEquality(dayInLoop, now),
         date: thl ? new Date(dayInLoop) : null
       });
-    }
+    }*/
   }
 
-  show(toFind: Date) {
+  show(toFind: Date) {/*
     if (toFind === null) {
       return;
     }
@@ -134,7 +134,7 @@ export class CalendarComponent implements OnDestroy {
         exams,
         homeworks
       }
-    });
+    });*/
   }
 
   private datePartialEquality(one: Date, two: Date) {

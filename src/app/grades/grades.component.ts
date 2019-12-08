@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { GradesDialogComponent } from './dialog';
 import { takeWhile } from 'rxjs/internal/operators/takeWhile';
+import { GradesData } from './gradesData.interface';
 
 @Component({
   selector: 'app-grades',
@@ -13,20 +14,25 @@ import { takeWhile } from 'rxjs/internal/operators/takeWhile';
 
 export class GradesComponent implements OnDestroy {
   alive = true;
-  users: Observable<User[]>;
-  states: boolean[] = [];
+  grades: Observable<GradesData[]>;
 
   constructor(private userService: UserService, public dialog: MatDialog) {
-    this.users = this.userService.getUsers().pipe();
+    this.grades = this.userService.gradesData.pipe();
   }
 
-  show(userIndex: number, lessonIndex: number, gradeIndex: number) {
+  show(userIndex: number, lessonIndex: number, gradeIndex: number, period: number) {
 
-    this.users
+    this.grades
     .pipe(takeWhile(() => this.alive))
-    .subscribe( users => {
-      const grade = users[userIndex].data.grades[lessonIndex].grades[gradeIndex];
-      const lessonName = users[userIndex].data.grades[lessonIndex].name;
+    .subscribe( grades => {
+
+      let grade = {};
+      const lessonName = grades[userIndex].grades[lessonIndex].name;
+      if (period == 1) {
+        grade = grades[userIndex].grades[lessonIndex].primePeriod[gradeIndex];
+      } else {
+        grade = grades[userIndex].grades[lessonIndex].latterPeriod[gradeIndex];
+      }
 
       const dialogRef = this.dialog.open(GradesDialogComponent, {
         data: {

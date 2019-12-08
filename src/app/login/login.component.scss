@@ -3,18 +3,77 @@
 @mixin login-theme($theme) {
     $accent: map-get($theme, accent);
     $primary: map-get($theme, primary);
-    $background: map-get($theme, background);
 
     .mat-card {
-        background-color: mat-color($primary, 900) !important;
+        background-color: mat-color($primary, 700) !important;
         color: mat-color($accent, 200) !important;
-        margin: 16px;
+        min-height: calc(100% - 64px);
+        border: 16px solid mat-color($primary, 900) !important;
+
+        &:not(.bt) {
+            min-height: calc(100% - 64px);
+        }
+
+        &.bt {
+            min-height: calc(100% - 64px - 3.2em);
+        }
+
+        .mat-card-footer {
+            background-color: mat-color($primary, 600) !important;
+            text-align: center;
+            padding: 1px;
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            left: 16px;
+        }
+
+        .mat-card-actions {
+            padding: 0;
+            margin-bottom: 8px;
+        }
+    }
+
+    .mat-expansion-panel {
+        margin-top: 3px;
+    }
+
+    .mat-expansion-panel-content {
+        overflow: hidden;
+    }
+
+    .mat-expansion-panel-body {
+        color: mat-color($accent, 100) !important;
+        padding: 5px;
+        h5 {
+            font-size: 12px;
+            text-align: center;
+        }
+        font-size: 8px;
+        text-align: justify;
+        ol {
+            margin-right: 35px;
+        }
+        ul {
+            padding-left: 2px;
+        }
+    }
+
+    .mat-expansion-panel-header {
+
+        background-color: mat-color($accent, 800) !important;
+        color: mat-color($primary, 900) !important;
+        font-size: 1.5em !important;
+        padding: 0 16px !important;
     }
     
+
     .mat-button {
         margin-left: 8px !important;
         margin-bottom: 8px !important;
+
         background-color: mat-color($accent, 800) !important;
+        color: mat-color($primary, 100) !important;
     }
 
     .mat-card-avatar > i {

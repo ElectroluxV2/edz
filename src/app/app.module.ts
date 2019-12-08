@@ -30,7 +30,7 @@ import { PlanComponent } from './plan/plan.component';
 import { LoginComponent } from './login/login.component';
 import { Routes, RouterModule } from '@angular/router';
 import { HeaderInterceptor } from './services/headerInterceptor';
-import { GuardService } from './services/guardService';
+import { GuardService } from './services/guard.service';
 import { SettingsComponent } from './settings/settings.component';
 import { GradesComponent } from './grades/grades.component';
 import { CalendarComponent } from './calendar/calendar.component';
@@ -41,14 +41,19 @@ import localePl from '@angular/common/locales/pl';
 import localePlExtra from '@angular/common/locales/extra/pl';
 registerLocaleData(localePl, 'pl-PL', localePlExtra);
 
+declare global {
+  interface Console {
+    timeLog(label: string, message: string): void;
+  }
+}
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/plan', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'grades', component: GradesComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
   { path: 'calendar', component: CalendarComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
   { path: 'settings', component: SettingsComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
   { path: 'plan', component: PlanComponent, canActivate: [GuardService], canDeactivate: [GuardService] },
+  { path: '', redirectTo: '/plan', pathMatch: 'full' },
   { path: '*', redirectTo: '' },
 ];
 

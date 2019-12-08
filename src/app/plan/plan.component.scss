@@ -4,23 +4,42 @@
     $accent: map-get($theme, accent);
     $primary: map-get($theme, primary);
 
-    .mat-subheader {
-        background-color: mat-color($accent, 800) !important;
-        color: mat-color($primary, 900) !important;
-        @include mat-elevation(2);
-        z-index: 2;
-        width: 100%;
-        position: sticky;
-        top: 0px;
-        font-size: 2em !important;
-    }
-
     .mat-list-item {
         background-color: mat-color($primary, 900) !important;
         color: mat-color($accent, 200) !important;
     }
 
-    .mat-list-base .mat-subheader:first-child {
+    .mat-list-base .mat-expansion-panel-header:first-child {
         margin-top: 0px !important;
+    }
+
+    .mat-expansion-panel {
+        margin: 0 !important;
+        overflow: inherit;
+    }
+
+    .mat-expansion-panel-header {
+        span {
+            font-size: 1.4em !important;
+            font-weight: 500 !important;
+        }
+
+        background-color: mat-color($accent, 800) !important;
+        color: mat-color($primary, 900) !important;
+        @include mat-elevation(2);
+
+        z-index: 2;
+        position: sticky;
+        top: 0px;
+    }
+
+    h3[matsubheader] {
+        margin: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .bt {
+        margin-bottom: 3.2em;
     }
 }
