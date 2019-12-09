@@ -6,8 +6,10 @@
     $warn: map-get($theme, warn);
 
     .calHeader {
-        position: sticky;
+        position: fixed;
         top: 0px;
+        right: 0px;
+        left: 0px;
         z-index: 2;
         @include mat-elevation(2);
         background-color: mat-color($accent, 800) !important;
@@ -24,6 +26,7 @@
 
         margin-left: 8px;
         margin-right: 8px;
+        margin-top: 3em;
 
         h3[matLine] {
             color: mat-color($accent, 200) !important;

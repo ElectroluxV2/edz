@@ -1,9 +1,9 @@
+import { CalendarData, Homework, Exam } from './calendarData.interface';
 import { Component, OnDestroy } from '@angular/core';
 import { User, UserService } from '../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarDialogComponent } from './dialog';
 import { takeWhile } from 'rxjs/internal/operators/takeWhile';
-
 
 interface Month {
   text: string;
@@ -25,24 +25,24 @@ interface Day {
 })
 export class CalendarComponent implements OnDestroy {
   alive = true;
-  users: User[] = [];
+  dates: CalendarData[] = [];
   months: Month[] = [];
 
-  constructor(private userService: UserService, public dialog: MatDialog) {/*
-    this.userService.getUsers()
+  constructor(private userService: UserService, public dialog: MatDialog) {
+    this.userService.calendarData
     .pipe(takeWhile(() => this.alive))
-    .subscribe( users => {
-      this.users = users as User[];
+    .subscribe( data => {
+      this.dates = data as CalendarData[];
     });
 
     // Array to ONLY mark dates
     const highlightDates: Date[] = [];
-    for (const user of this.users) {
-      for (const exam of user.data.calendar.exams) {
+    for (const data of this.dates) {
+      for (const exam of data.exams) {
         const date = new Date(exam.dateEnd);
         highlightDates.push(date);
       }
-      for (const homework of user.data.calendar.homeworks) {
+      for (const homework of data.homeworks) {
         const date = new Date(homework.dateEnd);
         highlightDates.push(date);
       }
@@ -100,10 +100,10 @@ export class CalendarComponent implements OnDestroy {
         current: this.datePartialEquality(dayInLoop, now),
         date: thl ? new Date(dayInLoop) : null
       });
-    }*/
+    }
   }
 
-  show(toFind: Date) {/*
+  show(toFind: Date) {
     if (toFind === null) {
       return;
     }
@@ -111,15 +111,15 @@ export class CalendarComponent implements OnDestroy {
     const homeworks: Homework[] = [];
     const exams: Exam[] = [];
 
-    for (const user of this.users) {
-      for (const exam of user.data.calendar.exams) {
+    for (const data of this.dates) {
+      for (const exam of data.exams) {
         const date = new Date(exam.dateEnd);
 
         if (this.datePartialEquality(toFind, date)) {
           exams.push(exam);
         }
       }
-      for (const homework of user.data.calendar.homeworks) {
+      for (const homework of data.homeworks) {
         const date = new Date(homework.dateEnd);
 
         if (this.datePartialEquality(toFind, date)) {
@@ -134,7 +134,7 @@ export class CalendarComponent implements OnDestroy {
         exams,
         homeworks
       }
-    });*/
+    });
   }
 
   private datePartialEquality(one: Date, two: Date) {

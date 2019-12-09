@@ -13,7 +13,7 @@ import { Observable } from 'rxjs/internal/Observable';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
-  protected users: Observable<SettingsData[]>;
+  public users: Observable<SettingsData[]>;
   public syncInProgress: Boolean = false;
 
   get themeSelected(): string {

@@ -28,6 +28,7 @@
     "material-bottom-nav": "^1.0.6",
     "moment": "^2.24.0",
     "rxjs": "~6.5.3",
+    "rxjs-compat": "^6.5.3",
     "service": "^0.1.4",
     "sweetalert2": "^8.6.0",
     "ts-md5": "^1.2.4",

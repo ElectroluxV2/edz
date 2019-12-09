@@ -67,7 +67,7 @@ const appRoutes: Routes = [
     GradesComponent,
     GradesDialogComponent,
     CalendarComponent,
-    CalendarDialogComponent
+    CalendarDialogComponent,
   ],
   entryComponents: [
     CalendarDialogComponent,

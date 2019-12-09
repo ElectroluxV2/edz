@@ -1,3 +1,4 @@
+import { Exam, CalendarData, Homework } from './../calendar/calendarData.interface';
 import { SettingsData } from './../settings/settingsData.interface';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy, HostListener } from '@angular/core';
@@ -31,6 +32,8 @@ export class User {
   };
   public plan: Plan;
   public grades: GradeLesson[];
+  public exams: Exam[];
+  public homeworks: Homework[];
 
   constructor(login: string, password_md5: string) {
     this.login = login;
@@ -50,6 +53,8 @@ export class User {
       child: this.child,
       plan: this.plan,
       grades: this.grades,
+      exams: this.exams,
+      homeworks: this.homeworks,
     });    
 
     const md5 = new Md5();
@@ -68,11 +73,13 @@ export class UserService implements OnDestroy {
   protected loginUrl = 'https://api.edziennik.ga/login';
   protected gradesUrl = 'https://api.edziennik.ga/grades';
   protected planUrl = 'https://api.edziennik.ga/lessonPlan';
-  protected calendarUrl = 'https://edz.budziszm.pro-linuxpl.com/api.php/calendar';
+  protected homeworksUrl = 'https://api.edziennik.ga/homeworks';
+  protected examsUrl = 'https://api.edziennik.ga/exams';
 
   protected plans: PlanData[] = [];
   protected grades: GradesData[] = [];
-  private settings: SettingsData[] = [];
+  protected settings: SettingsData[] = [];
+  protected calendar: CalendarData[] = [];
 
   constructor(private http: HttpClient) {
     console.log('User service');
@@ -109,6 +116,13 @@ export class UserService implements OnDestroy {
           userName: saved.userName,
           childName: (saved.child) ? (saved.child.name) : (null),
           userType: saved.accountType,
+        });
+
+        this.calendar.push({
+          userLogin: saved.login,
+          userName: name,
+          exams: saved.exams,
+          homeworks: saved.homeworks,
         });
         
         // We need to use native constructor
@@ -158,6 +172,10 @@ export class UserService implements OnDestroy {
 
   get settingsData(): Observable<SettingsData[]> {
     return of(this.settings);
+  }
+
+  get calendarData(): Observable<CalendarData[]> {
+    return of(this.calendar);
   }
 
   get isAnyoneLoggedIn(): Boolean {
@@ -313,6 +331,118 @@ export class UserService implements OnDestroy {
     });
   }
 
+  private async getExams(user: User): Promise<{ message: string }> {
+    return new Promise<{ message: string }>((resolve, reject) => {
+
+      // Response from api
+      interface ExamsResponse {
+        statusCode: number;
+        data: {
+          exams: Exam[];
+        };
+        error: null | {
+          type: string;
+          description: string;
+        };
+      }
+
+      const data: any = {
+        login: user.login,
+        password_md5: user.password_md5
+      };
+
+      this.http.post(this.examsUrl, data)
+        .pipe(takeWhile(() => this.alive))
+        .subscribe((response: ExamsResponse) => {
+
+          if (response.error) {
+            return reject({
+              message: response.error.description
+            });
+          }
+
+          user.exams = response.data.exams;
+
+          // Add this user data only if there is no such user, otherwise set data for this user
+          if (this.calendar.some(d => d.userLogin === user.login)) {
+            this.calendar.find(d => d.userLogin === user.login).exams = user.exams;
+          } else {
+            let name: string;
+            if (user.accountType === AccountType.parent) {
+              name = user.child.name;
+            } else {
+              name = user.name;
+            }
+
+            this.calendar.push({
+              userLogin: user.login,
+              userName: name,
+              exams: user.exams,
+              homeworks: user.homeworks ? user.homeworks : [],
+            });
+          }
+
+          return resolve({ message: 'Downloaded exams for ' + user.login });
+        });
+    });
+  }
+
+  private async getHomeworks(user: User): Promise<{ message: string }> {
+    return new Promise<{ message: string }>((resolve, reject) => {
+
+      // Response from api
+      interface HomeworksResponse {
+        statusCode: number;
+        data: {
+          homeworks: Homework[];
+        };
+        error: null | {
+          type: string;
+          description: string;
+        };
+      }
+
+      const data: any = {
+        login: user.login,
+        password_md5: user.password_md5
+      };
+
+      this.http.post(this.homeworksUrl, data)
+        .pipe(takeWhile(() => this.alive))
+        .subscribe((response: HomeworksResponse) => {
+
+          if (response.error) {
+            return reject({
+              message: response.error.description
+            });
+          }
+
+          user.homeworks = response.data.homeworks;
+
+          // Add this user data only if there is no such user, otherwise set data for this user
+          if (this.calendar.some(d => d.userLogin === user.login)) {
+            this.calendar.find(d => d.userLogin === user.login).homeworks = user.homeworks;
+          } else {
+            let name: string;
+            if (user.accountType === AccountType.parent) {
+              name = user.child.name;
+            } else {
+              name = user.name;
+            }
+
+            this.calendar.push({
+              userLogin: user.login,
+              userName: name,
+              homeworks: user.homeworks,
+              exams: user.exams ? user.exams : [],
+            });
+          }
+
+          return resolve({ message: 'Downloaded homeworks for ' + user.login });
+        });
+    });
+  }
+
   public async sync(options: {
       onlyLatestUser: boolean;
     } = {
@@ -339,6 +469,26 @@ export class UserService implements OnDestroy {
         });
 
         await this.getGrades(user).catch((result: { message: string }) => {
+          return reject({
+            message: result.message
+          });
+        }).then((result: { message: string }) => {
+          if (!environment.production) {
+            console.timeLog('sync', result.message);
+          }
+        });
+
+        await this.getExams(user).catch((result: { message: string }) => {
+          return reject({
+            message: result.message
+          });
+        }).then((result: { message: string }) => {
+          if (!environment.production) {
+            console.timeLog('sync', result.message);
+          }
+        });
+
+        await this.getHomeworks(user).catch((result: { message: string }) => {
           return reject({
             message: result.message
           });

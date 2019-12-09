@@ -6,4 +6,5 @@ body, html, .app-frame {
     margin: 0px;
     height: 100%;
     background-color: #341717;
+    overscroll-behavior-y: none;
 }
