@@ -37,6 +37,8 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { CalendarDialogComponent } from './calendar/dialog';
 import { GradesDialogComponent } from './grades/dialog';
 import { registerLocaleData } from '@angular/common';
+import { PlatformModule } from '@angular/cdk/platform';
+
 import localePl from '@angular/common/locales/pl';
 import localePlExtra from '@angular/common/locales/extra/pl';
 registerLocaleData(localePl, 'pl-PL', localePlExtra);
@@ -98,6 +100,7 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     MatDialogModule,
     MatSnackBarModule,
+    PlatformModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: false } // <-- debugging purposes only

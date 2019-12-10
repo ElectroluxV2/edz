@@ -16,6 +16,9 @@
   <mat-list-item>
     <mat-icon matListIcon>sync</mat-icon>
     <p matLine>Synchronizacja</p>
+  </mat-list-item>
+  
+  <mat-list-item>
     <p matLine>Brak automatycznej</p>
     <small matLine>Ostatnia: <span [hidden]="!syncInProgress">w toku</span><span [hidden]="syncInProgress">{{lastSync | date:'d MMMM HH:mm':'':'pl-PL'}}</span></small>
     <button [disabled]="syncInProgress" (click)="sync()" class="mat-button-n ct" mat-button>Wymuś</button>
@@ -74,6 +77,48 @@
   <mat-list-item>
     <p matLine>Dodaj nowego użytkownika</p>
     <button class="mat-button-n" mat-button (click)="addUser()">Dodaj</button>
+  </mat-list-item>
+
+  <mat-divider></mat-divider>
+
+  <mat-list-item>
+    <mat-icon matListIcon>info</mat-icon>
+    <p matLine>Informacje o aplikacji</p>
+  </mat-list-item>
+  <mat-list-item class="app-info">
+    <p matLine>
+      <span>Version:</span>
+      <code>{{version}} - stable</code>
+    </p>
+
+    <p matLine>
+      <span>UT:</span>
+      <code>{{updateTime | date:'dd-MM-HH-mm' }}</code>
+    </p>
+
+    <p matLine>
+      <span>LSWF:</span>
+      <code>{{swFetch | date:'dd-MM-HH-mm'}}</code>
+    </p>
+
+    <p matLine>
+      <span>System:</span>
+      <code>{{system}}</code>
+    </p>
+
+    <p matLine>
+      <span>Push:</span>
+      <code>{{pushStatus}}</code>
+    </p>
+
+    <p matLine style="overflow: visible; padding-top: 10px;">
+      <span>Sprawdź dostępność aktualizacji</span>
+        <button [disabled]="clicked" class="mat-icon-button" style="margin-top: -10px; float: right;" mat-button (click)="clicked = true; checkUpdate();">
+          <mat-icon>cached</mat-icon>
+        </button>
+    </p>
+    
+
   </mat-list-item>
 
   <mat-divider></mat-divider>
