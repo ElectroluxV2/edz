@@ -10,8 +10,9 @@
             <mat-list>
                 <div *ngFor="let lesson of data.plan.monday; index as i">
                     <mat-list-item matRipple *ngIf="!lesson.empty" >
-                        <h4 matLine>{{lesson.name}}</h4>
-                        <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
+                        <h4 matLine class="name">{{lesson.name}}</h4>
+                        <p matLine class="info"> {{lesson.time}} <span>{{lesson.teacher}}</span></p>
+                        <i *ngIf="lesson.subject.value" (click)="toggleClass($event,'full')" matLine class="subject">T:<sub class="star" *ngIf="!datePartialEquality(lesson.date, lesson.subject.date)">*</sub> {{lesson.subject.value}}</i>
                         <mat-divider></mat-divider>
                     </mat-list-item>
                 </div>
@@ -25,8 +26,9 @@
             <mat-list>
                 <div *ngFor="let lesson of data.plan.tuesday; index as i">
                     <mat-list-item matRipple *ngIf="!lesson.empty" >
-                        <h4 matLine>{{lesson.name}}</h4>
-                        <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
+                        <h4 matLine class="name">{{lesson.name}}</h4>
+                        <p matLine class="info"> {{lesson.time}} <span>{{lesson.teacher}}</span></p>
+                        <i *ngIf="lesson.subject.value" (click)="toggleClass($event,'full')" matLine class="subject">T:<sub class="star" *ngIf="!datePartialEquality(lesson.date, lesson.subject.date)">*</sub> {{lesson.subject.value}}</i>
                         <mat-divider></mat-divider>
                     </mat-list-item>
                 </div>
@@ -40,8 +42,9 @@
             <mat-list>
                 <div *ngFor="let lesson of data.plan.wednesday; index as i">
                     <mat-list-item matRipple *ngIf="!lesson.empty" >
-                        <h4 matLine>{{lesson.name}}</h4>
-                        <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
+                        <h4 matLine class="name">{{lesson.name}}</h4>
+                        <p matLine class="info"> {{lesson.time}} <span>{{lesson.teacher}}</span></p>
+                        <i *ngIf="lesson.subject.value" (click)="toggleClass($event,'full')" matLine class="subject">T:<sub class="star" *ngIf="!datePartialEquality(lesson.date, lesson.subject.date)">*</sub> {{lesson.subject.value}}</i>
                         <mat-divider></mat-divider>
                     </mat-list-item>
                 </div>
@@ -55,8 +58,9 @@
             <mat-list>
                 <div *ngFor="let lesson of data.plan.thursday; index as i">
                     <mat-list-item matRipple *ngIf="!lesson.empty" >
-                        <h4 matLine>{{lesson.name}}</h4>
-                        <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
+                        <h4 matLine class="name">{{lesson.name}}</h4>
+                        <p matLine class="info"> {{lesson.time}} <span>{{lesson.teacher}}</span></p>
+                        <i *ngIf="lesson.subject.value" (click)="toggleClass($event,'full')" matLine class="subject">T:<sub class="star" *ngIf="!datePartialEquality(lesson.date, lesson.subject.date)">*</sub> {{lesson.subject.value}}</i>
                         <mat-divider></mat-divider>
                     </mat-list-item>
                 </div>
@@ -70,8 +74,9 @@
             <mat-list>
                 <div *ngFor="let lesson of data.plan.friday; index as i">
                     <mat-list-item matRipple *ngIf="!lesson.empty" >
-                        <h4 matLine>{{lesson.name}}</h4>
-                        <p matLine> {{lesson.time}} {{lesson.teacher}}</p>
+                        <h4 matLine class="name">{{lesson.name}}</h4>
+                        <p matLine class="info"> {{lesson.time}} <span>{{lesson.teacher}}</span></p>
+                        <i *ngIf="lesson.subject.value" (click)="toggleClass($event,'full')" matLine class="subject">T:<sub class="star" *ngIf="!datePartialEquality(lesson.date, lesson.subject.date)">*</sub> {{lesson.subject.value}}</i>
                         <mat-divider></mat-divider>
                     </mat-list-item>
                 </div>

@@ -4,6 +4,36 @@
     $accent: map-get($theme, accent);
     $primary: map-get($theme, primary);
 
+
+    .name {
+        font-weight: 600 !important;
+    }
+
+    .info {
+        font-weight: 500 !important;
+        span {
+            font-weight: 300 !important;
+        }
+    }
+
+    .full {
+        max-height: 60px !important;
+        white-space: normal !important; 
+        line-height: 12px;
+        padding-right: 2px !important;
+        padding-bottom: 2px !important;
+    }
+
+    .subject {
+        transition: all 0.15s linear;
+        font-weight: 200 !important;
+        max-height: 20px;
+    }
+
+    .star {
+        color: mat-color($accent, 600) !important;
+    }
+
     .mat-list-item {
         background-color: mat-color($primary, 900) !important;
         color: mat-color($accent, 200) !important;

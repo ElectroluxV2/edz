@@ -5,7 +5,7 @@ import { Injectable, OnDestroy, HostListener } from '@angular/core';
 import { takeWhile } from 'rxjs/internal/operators/takeWhile';
 import { environment } from 'src/environments/environment';
 import { Md5 } from 'ts-md5/dist/md5';
-import { PlanData, Plan } from '../plan/planData.interface';
+import { PlanData, Plan, Subject } from '../plan/planData.interface';
 import { Observable } from 'rxjs/internal/Observable';
 import { of } from 'rxjs/internal/observable/of';
 import { GradesData, GradeLesson } from '../grades/gradesData.interface';
@@ -73,6 +73,7 @@ export class UserService implements OnDestroy {
   protected loginUrl = 'https://api.edziennik.ga/login';
   protected gradesUrl = 'https://api.edziennik.ga/grades';
   protected planUrl = 'https://api.edziennik.ga/lessonPlan';
+  protected subjectsUrl = 'https://api.edziennik.ga/subjects';
   protected homeworksUrl = 'https://api.edziennik.ga/homeworks';
   protected examsUrl = 'https://api.edziennik.ga/exams';
 
@@ -212,6 +213,219 @@ export class UserService implements OnDestroy {
     console.log(this.users);
     
   }
+
+  private async getSubjects(user: User): Promise<{ message: string }> {
+    return new Promise<{ message: string }>((resolve, reject) => {
+
+      // Response from api
+      interface SubjectsResponse {
+        statusCode: number;
+        data: {
+          subjects: Subject[];
+        };
+        error: null | {
+          type: string;
+          description: string;
+        };
+      }
+
+      const data: any = {
+        login: user.login,
+        password_md5: user.password_md5
+      };
+
+      if (user.accountType === AccountType.parent) {
+        data.child = user.child.login;
+      }
+
+      this.http.post(this.subjectsUrl, data)
+        .pipe(takeWhile(() => this.alive))
+        .subscribe((response: SubjectsResponse) => {
+
+          if (response.error) {
+            return reject({
+              message: response.error.description
+            });
+          }
+
+          console.log(response);
+
+          // Create Date objects
+          for (const subject of response.data.subjects) {
+            subject.date = new Date(subject.date);
+          }
+
+          // Find plan data index
+          const planIndex = this.plans.findIndex((d) => d.userLogin === user.login);
+
+          // Set Subject for each lesson
+          for (const lesson of this.plans[planIndex].plan.monday) {
+            if (lesson.empty) continue;
+            lesson.date = new Date(lesson.date)
+            lesson.subject = response.data.subjects.find((s) => {
+              return (this.datePartialEquality(s.date, lesson.date) && (s.lesson === lesson.name));
+            });
+
+            // Search for eailer subject
+            if (!lesson.subject) {
+              lesson.subject = response.data.subjects.find((s) => {
+                const lastWeek = new Date(lesson.date.getTime() - 7 * 24 * 60 * 60 * 1000);
+                return (this.datePartialEquality(s.date, lastWeek) && (s.lesson === lesson.name));
+              });
+            }
+
+            if (!lesson.subject) {
+              lesson.subject = {
+                school: 'n/a',
+                group: 'n/a',
+                season: 'n/a',
+                lesson: lesson.name,
+                cycle: 'daily',
+                date: lesson.date,
+                dateEnd: lesson.date,
+                dateStart: lesson.date,
+                dayInWeekName: 'Poniedziałek',
+                value: ''
+              }
+            }
+          }
+
+          for (const lesson of this.plans[planIndex].plan.tuesday) {
+            if (lesson.empty) continue;
+            lesson.date = new Date(lesson.date)
+            lesson.subject = response.data.subjects.find((s) => {
+              return (this.datePartialEquality(s.date, lesson.date) && (s.lesson === lesson.name));
+            });
+
+            // Search for eailer subject
+            if (!lesson.subject) {
+              lesson.subject = response.data.subjects.find((s) => {
+                const lastWeek = new Date(lesson.date.getTime() - 7 * 24 * 60 * 60 * 1000);
+                return (this.datePartialEquality(s.date, lastWeek) && (s.lesson === lesson.name));
+              });
+            }
+
+            if (!lesson.subject) {
+              lesson.subject = {
+                school: 'n/a',
+                group: 'n/a',
+                season: 'n/a',
+                lesson: lesson.name,
+                cycle: 'daily',
+                date: lesson.date,
+                dateEnd: lesson.date,
+                dateStart: lesson.date,
+                dayInWeekName: 'Wtorek',
+                value: ''
+              }
+            }
+          }
+
+          for (const lesson of this.plans[planIndex].plan.wednesday) {
+            if (lesson.empty) continue;
+            lesson.date = new Date(lesson.date)
+            lesson.subject = response.data.subjects.find((s) => {
+              return (this.datePartialEquality(s.date, lesson.date) && (s.lesson === lesson.name));
+            });
+
+            // Search for eailer subject
+            if (!lesson.subject) {
+              lesson.subject = response.data.subjects.find((s) => {
+                const lastWeek = new Date(lesson.date.getTime() - 7 * 24 * 60 * 60 * 1000);
+                return (this.datePartialEquality(s.date, lastWeek) && (s.lesson === lesson.name));
+              });
+            }
+
+            if (!lesson.subject) {
+              lesson.subject = {
+                school: 'n/a',
+                group: 'n/a',
+                season: 'n/a',
+                lesson: lesson.name,
+                cycle: 'daily',
+                date: lesson.date,
+                dateEnd: lesson.date,
+                dateStart: lesson.date,
+                dayInWeekName: 'Środa',
+                value: ''
+              }
+            }
+          }
+
+          for (const lesson of this.plans[planIndex].plan.thursday) {
+            if (lesson.empty) continue;
+            lesson.date = new Date(lesson.date)
+            lesson.subject = response.data.subjects.find((s) => {
+              return (this.datePartialEquality(s.date, lesson.date) && (s.lesson === lesson.name));
+            });
+
+            // Search for eailer subject
+            if (!lesson.subject) {
+              lesson.subject = response.data.subjects.find((s) => {
+                const lastWeek = new Date(lesson.date.getTime() - 7 * 24 * 60 * 60 * 1000);
+                return (this.datePartialEquality(s.date, lastWeek) && (s.lesson === lesson.name));
+              });
+            }
+
+            if (!lesson.subject) {
+              lesson.subject = {
+                school: 'n/a',
+                group: 'n/a',
+                season: 'n/a',
+                lesson: lesson.name,
+                cycle: 'daily',
+                date: lesson.date,
+                dateEnd: lesson.date,
+                dateStart: lesson.date,
+                dayInWeekName: 'Czwartek',
+                value: ''
+              }
+            }
+          }
+
+          for (const lesson of this.plans[planIndex].plan.friday) {
+            if (lesson.empty) continue;
+            lesson.date = new Date(lesson.date)
+            lesson.subject = response.data.subjects.find((s) => {
+              return (this.datePartialEquality(s.date, lesson.date) && (s.lesson === lesson.name));
+            });
+
+            // Search for eailer subject
+            if (!lesson.subject) {
+              lesson.subject = response.data.subjects.find((s) => {
+                const lastWeek = new Date(lesson.date.getTime() - 7 * 24 * 60 * 60 * 1000);
+                return (this.datePartialEquality(s.date, lastWeek) && (s.lesson === lesson.name));
+              });
+            }
+
+            if (!lesson.subject) {
+              lesson.subject = {
+                school: 'n/a',
+                group: 'n/a',
+                season: 'n/a',
+                lesson: lesson.name,
+                cycle: 'daily',
+                date: lesson.date,
+                dateEnd: lesson.date,
+                dateStart: lesson.date,
+                dayInWeekName: 'Piątek',
+                value: ''
+              }
+            }
+          }
+
+          console.log(this.plans[planIndex].plan.wednesday);
+          
+          
+          return resolve({ message: 'Downloaded subjects for ' + user.login });
+        });
+    });
+  }
+
+  private datePartialEquality(one: Date, two: Date) {
+    return ((one.getDate() === two.getDate()) && (one.getMonth() === two.getMonth()) && (one.getFullYear() === two.getFullYear()));
+  }
+
 
   private async getPlan(user: User): Promise<{ message: string }> {
     return new Promise<{ message: string }>((resolve, reject) => {
@@ -459,6 +673,17 @@ export class UserService implements OnDestroy {
         }
 
         await this.getPlan(user).catch((result: { message: string }) => {
+          return reject({
+            message: result.message
+          });
+        }).then((result: { message: string }) => {
+          if (!environment.production) {
+            console.timeLog('sync', result.message);
+          }
+        });
+
+        // MUST BE AFTER GETPLAN
+        await this.getSubjects(user).catch((result: { message: string }) => {
           return reject({
             message: result.message
           });
