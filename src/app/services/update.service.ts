@@ -1,6 +1,8 @@
+import { UserService } from './user.service';
 import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +23,7 @@ export class UpdateService {
     return new Date(localStorage.getItem('lastUpdate'));
   }
 
-  constructor(private swUpdate: SwUpdate, private snackBar: MatSnackBar) {
+  constructor(private swUpdate: SwUpdate, private snackBar: MatSnackBar, private userService: UserService) {
     this.checkForUpdates();
 
     if (!localStorage.getItem('version')) {
@@ -38,7 +40,20 @@ export class UpdateService {
     }
 
     if (localStorage.getItem('version') !== this.currentVersion) {
-      localStorage.setItem('version', this.currentVersion);
+
+      Swal.fire({
+        title: 'Wprowadzanie zmian',
+        text: 'Twa wprowadzanie zmian w nowej wersji',
+        type: 'info',
+        allowOutsideClick: false,
+      });
+  
+      Swal.showLoading();
+      // Prevent data incompatible
+      this.userService.sync().then(() => {
+        localStorage.setItem('version', this.currentVersion);
+        Swal.close();
+      })
     }
   }
 
