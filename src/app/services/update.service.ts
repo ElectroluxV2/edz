@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 })
 export class UpdateService {
 
-  protected currentVersion: string = '1.0.1';
+  protected currentVersion: string = '1.0.2';
 
   get version(): String {
     return this.currentVersion;
