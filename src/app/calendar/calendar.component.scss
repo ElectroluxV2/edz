@@ -64,4 +64,9 @@
         border-color: mat-color($warn, 900) !important;
         border-radius:50%;
     }
+
+    span#now {
+        position: relative;
+        top: -3.2em;
+    }
 }

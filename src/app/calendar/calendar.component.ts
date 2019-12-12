@@ -1,5 +1,5 @@
 import { CalendarData, Homework, Exam } from './calendarData.interface';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterContentInit, ViewChild, ElementRef, ViewChildren, AfterViewInit } from '@angular/core';
 import { User, UserService } from '../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarDialogComponent } from './dialog';
@@ -7,6 +7,7 @@ import { takeWhile } from 'rxjs/internal/operators/takeWhile';
 
 interface Month {
   text: string;
+  current: boolean;
   days: Day[];
 }
 
@@ -23,7 +24,7 @@ interface Day {
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnDestroy {
+export class CalendarComponent implements OnDestroy, AfterViewInit {
   alive = true;
   dates: CalendarData[] = [];
   months: Month[] = [];
@@ -66,6 +67,7 @@ export class CalendarComponent implements OnDestroy {
 
         this.months.push({
           text: formatter.format(dayInLoop) + ' ' + dayInLoop.getFullYear(),
+          current: false,
           days: []
         });
         monthIndex++;
@@ -100,6 +102,11 @@ export class CalendarComponent implements OnDestroy {
         current: this.datePartialEquality(dayInLoop, now),
         date: thl ? new Date(dayInLoop) : null
       });
+
+      if (this.datePartialEquality(dayInLoop, now)) {
+        this.months[monthIndex].current = true;
+      }
+      
     }
   }
 
@@ -143,5 +150,9 @@ export class CalendarComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.alive = false;
+  }
+
+  ngAfterViewInit(): void {
+    document.getElementById('now').scrollIntoView(true);    
   }
 }

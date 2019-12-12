@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, Renderer2, AfterViewInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Observable } from 'rxjs';
 import { PlanData } from './planData.interface';
@@ -9,7 +9,7 @@ import { PlanData } from './planData.interface';
   styleUrls: ['./plan.component.scss']
 })
 
-export class PlanComponent implements OnDestroy {
+export class PlanComponent implements OnDestroy, AfterViewInit {
   alive = true;
   plans: Observable<PlanData[]>;
 
@@ -42,5 +42,10 @@ export class PlanComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.alive = false;
+  }
+
+  ngAfterViewInit(): void {
+    const i = new Date().getDay() - 1;
+    document.getElementsByTagName('mat-expansion-panel-header')[i].scrollIntoView(true);
   }
 }
