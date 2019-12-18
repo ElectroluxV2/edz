@@ -11,5 +11,6 @@ body, html {
 .app-frame { 
     font-family: Roboto, "Helvetica Neue", sans-serif;
     margin: 0px;
+    min-height: 100%;
     overscroll-behavior-y: none;
 }
