@@ -1,9 +1,15 @@
 @import '~@angular/material/theming';
 @import './styles/material-theme';
 
-body, html, .app-frame { 
+body, html { 
     font-family: Roboto, "Helvetica Neue", sans-serif;
     margin: 0px;
     height: 100%;
+    overscroll-behavior-y: none;
+}
+
+.app-frame { 
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    margin: 0px;
     overscroll-behavior-y: none;
 }
