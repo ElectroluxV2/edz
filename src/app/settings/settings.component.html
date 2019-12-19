@@ -27,8 +27,21 @@
   <mat-divider></mat-divider>
 
   <mat-list-item>
+    <mat-icon matListIcon>notifications</mat-icon>
+    <p matLine>Powiadomienia</p>
+  </mat-list-item>
+
+  <mat-list-item>
+    <p matLine>Wyłącz / włącz</p>
+    <small matLine>Stan: {{pushStatus}}</small>
+    <mat-slide-toggle [disabled]="pushSlideDisable" [checked]="this.pushStatus=='Enabled'" (change)="changePush($event)"></mat-slide-toggle>
+  </mat-list-item>
+  
+  <mat-divider></mat-divider>
+
+  <mat-list-item>
     <mat-icon matListIcon>color_lens</mat-icon>
-    <p matLine>Motyw </p>
+    <p matLine>Motyw</p>
   </mat-list-item>
 
   <mat-list-item>
@@ -51,7 +64,7 @@
           </mat-optgroup>
 
           <mat-optgroup label="Jasne">
-              <mat-option value="light-brown-1">Niedobre cappuccino</mat-option>
+            <mat-option value="light-brown-1">Niedobre cappuccino</mat-option>
           </mat-optgroup>
 
       </mat-select>
@@ -108,17 +121,16 @@
 
     <p matLine>
       <span>Push:</span>
-      <code>{{pushStatus}}</code>
+      <code>{{pushSupport}}</code>
     </p>
 
     <p matLine style="overflow: visible; padding-top: 10px;">
       <span>Sprawdź dostępność aktualizacji</span>
-        <button [disabled]="clicked" class="mat-icon-button" style="margin-top: -10px; float: right;" mat-button (click)="clicked = true; checkUpdate();">
-          <mat-icon>cached</mat-icon>
-        </button>
+      <button [disabled]="clicked" class="mat-icon-button" style="margin-top: -10px; float: right;" mat-button (click)="clicked = true; checkUpdate();">
+        <mat-icon>cached</mat-icon>
+      </button>
     </p>
     
-
   </mat-list-item>
 
   <mat-divider></mat-divider>

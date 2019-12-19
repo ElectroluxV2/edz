@@ -1,7 +1,8 @@
+import { SwPush } from '@angular/service-worker';
 import { Exam, CalendarData, Homework } from './../calendar/calendarData.interface';
 import { SettingsData } from './../settings/settingsData.interface';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnDestroy, HostListener } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { takeWhile } from 'rxjs/internal/operators/takeWhile';
 import { environment } from 'src/environments/environment';
 import { Md5 } from 'ts-md5/dist/md5';
@@ -68,6 +69,7 @@ export class User {
   providedIn: 'root'
 })
 export class UserService implements OnDestroy {
+
   protected alive = true;
   protected users: User[] = [];
   protected loginUrl = 'https://api.edziennik.ga/login';
@@ -82,7 +84,7 @@ export class UserService implements OnDestroy {
   protected settings: SettingsData[] = [];
   protected calendar: CalendarData[] = [];
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, readonly swPush: SwPush) {
     console.log('User service');
     // Load users
 
@@ -134,6 +136,33 @@ export class UserService implements OnDestroy {
     }
 
     //this.testReactive(1, 'up');
+  }
+
+  public async enablePush(endpoint: string) {
+
+    interface SubscribeResponse {
+      statusCode: number;
+      data: {
+        credentials_id: number;
+        push_id: number;
+      };
+      error: null | {
+        type: string;
+        description: string;
+      };
+    };
+
+    for (const user of this.users) {
+      this.http.post('https://api.edziennik.ga/subscribe', {
+        login: user.login,
+        password_md5: user.password_md5,
+        endpoint: endpoint
+      })
+      .pipe(takeWhile(() => this.alive))
+      .subscribe((response: SubscribeResponse) => {
+        console.log(response);
+      });
+    }
   }
 
   get lastSync(): Date {
