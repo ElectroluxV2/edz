@@ -138,7 +138,7 @@ export class UserService implements OnDestroy {
     //this.testReactive(1, 'up');
   }
 
-  public async enablePush(endpoint: string) {
+  public async enablePush(endpoint: PushSubscription) {
 
     interface SubscribeResponse {
       statusCode: number;
@@ -156,7 +156,7 @@ export class UserService implements OnDestroy {
       this.http.post('https://api.edziennik.ga/subscribe', {
         login: user.login,
         password_md5: user.password_md5,
-        endpoint: endpoint
+        subscription: endpoint
       })
       .pipe(takeWhile(() => this.alive))
       .subscribe((response: SubscribeResponse) => {

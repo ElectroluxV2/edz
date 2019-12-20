@@ -140,6 +140,8 @@ export class SettingsComponent {
     
     if (!event.checked) {
       // TODO: Unsubsribe from push
+      localStorage.removeItem('pushEnabled');
+      this.pushStatus = 'Disabled';
       return;
     }
 
@@ -167,7 +169,7 @@ export class SettingsComponent {
     }).then((sub: PushSubscription) => {
       this.pushStatus = 'Enabled';
       localStorage.setItem('pushEnabled', 'true');
-      sub ? this.userService.enablePush(sub.endpoint): '';
+      sub ? this.userService.enablePush(sub): '';
     }) as PushSubscription;
   }
 }
