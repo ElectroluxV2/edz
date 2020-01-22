@@ -9,6 +9,7 @@ export interface Grade {
     description: string;
     date: string;
     issuer: string;
+    new?: boolean;
 }
   
 export interface GradeLesson {

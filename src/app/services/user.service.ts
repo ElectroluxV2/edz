@@ -1,3 +1,5 @@
+import { Grade } from './../grades/gradesData.interface';
+import { Router, NavigationExtras } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { Exam, CalendarData, Homework } from './../calendar/calendarData.interface';
 import { SettingsData } from './../settings/settingsData.interface';
@@ -69,7 +71,6 @@ export class User {
   providedIn: 'root'
 })
 export class UserService implements OnDestroy {
-
   protected alive = true;
   protected users: User[] = [];
   protected loginUrl = 'https://api.edziennik.ga/login';
@@ -84,7 +85,7 @@ export class UserService implements OnDestroy {
   protected settings: SettingsData[] = [];
   protected calendar: CalendarData[] = [];
 
-  constructor(private http: HttpClient, readonly swPush: SwPush) {
+  constructor(private http: HttpClient, readonly swPush: SwPush, private router: Router) {
     console.log('User service');
     // Load users
 
@@ -136,6 +137,141 @@ export class UserService implements OnDestroy {
     }
 
     //this.testReactive(1, 'up');
+    this.pushHandling();
+  }
+
+  public removeNewFromGrade(login: string, lesson: string, grade: Grade) {
+
+    const uIndex = this.users.findIndex(u => u.login === login);
+
+    if (uIndex === -1) {
+      console.warn('Missing user with login: '+login);
+      return;
+    }
+
+    const lIndex = this.users[uIndex].grades.findIndex(l => l.name === lesson);
+        
+    if (lIndex === -1) {
+      console.warn('Missing lesson with name: '+lesson);
+      return;
+    }
+
+    // Get index of grade
+    let gIndex = -1;
+    if (grade.period === 1) {
+      gIndex = this.users[uIndex].grades[lIndex].primePeriod.findIndex(g => this.sameGrade(g, grade));
+    } else {
+      gIndex = this.users[uIndex].grades[lIndex].latterPeriod.findIndex(g => this.sameGrade(g, grade));
+    }
+
+    if (gIndex === -1) {         
+      return;
+    }
+
+    // Remove new
+    if (grade.period === 1) {
+      this.users[uIndex].grades[lIndex].primePeriod[gIndex].new = false;
+    } else {
+      this.users[uIndex].grades[lIndex].latterPeriod[gIndex].new = false;
+    }
+
+  }
+
+  private sameGrade(g1: Grade, g2: Grade): boolean {
+    
+    if (g1.average !== g2.average) return false;
+    if (g1.category !== g2.category) return false;
+    if (g1.date !== g2.date) return false;
+    if (g1.description !== g2.description) return false;
+    if (g1.grade !== g2.grade) return false;
+    if (g1.issuer !== g2.issuer) return false;
+    if (g1.period !== g2.period) return false;
+    if (g1.weight !== g2.weight) return false;
+
+    return true;
+  }
+
+  private pushHandling(): void {
+    // Handle clicks
+    this.swPush.notificationClicks.subscribe(c => {
+      // Shitty implementation
+      // https://stackoverflow.com/questions/54138763/open-pwa-when-clicking-on-push-notification-handled-by-service-worker-ng7-andr
+    });
+
+    // Used to insert data before notification shows
+    this.swPush.messages.subscribe((n: {
+      notification: {
+        actions: [],
+        title: string,
+        body: string,
+        icon: string,
+        data: {
+          lessonName?: string,
+          oldGrade?: Grade,
+          newGrade?: Grade,
+          login?: string,
+        }
+      }
+
+    }) => {
+
+      if (!!n.notification.data.lessonName) {
+
+        const uIndex = this.users.findIndex(u => u.login === n.notification.data.login);
+
+        if (uIndex === -1) {
+          console.warn('Missing user with login: '+n.notification.data.login);
+          return;
+        }
+
+        const lIndex = this.users[uIndex].grades.findIndex(l => l.name === n.notification.data.lessonName);
+        
+        if (lIndex === -1) {
+          console.warn('Missing lesson with name: '+n.notification.data.lessonName);
+          return;
+        }
+
+        if (!!n.notification.data.oldGrade) {
+          // Get index of old grade
+          let gIndex = -1;
+          if (n.notification.data.oldGrade.period === 1) {
+            gIndex = this.users[uIndex].grades[lIndex].primePeriod.findIndex(g => this.sameGrade(g, n.notification.data.oldGrade));
+          } else {
+            gIndex = this.users[uIndex].grades[lIndex].latterPeriod.findIndex(g => this.sameGrade(g, n.notification.data.oldGrade));
+          }
+
+          if (gIndex === -1) {         
+            console.log('Local copy is missing of grade to remove, gonna just add new one.');
+          } else {
+            // Remove old one
+            if (n.notification.data.oldGrade.period === 1) {
+              this.users[uIndex].grades[lIndex].primePeriod.splice(gIndex, 1);
+            } else {
+              this.users[uIndex].grades[lIndex].latterPeriod.splice(gIndex, 1);
+            }
+            
+            // No need to do changes to grades view data
+          }
+        }
+
+        let newG = n.notification.data.newGrade;
+        newG.new = true;
+
+        // Push new one
+        if (n.notification.data.newGrade.period === 1) {
+          this.users[uIndex].grades[lIndex].primePeriod.push(newG);
+        } else {
+          this.users[uIndex].grades[lIndex].latterPeriod.push(newG);
+        }
+
+        // No need to do changes to grades view data
+        this.users[uIndex].save(); // For offline, and next uses
+        console.log('Added one grade to user and saved.');
+      } else {
+        console.warn('Unsuported notify!');
+        console.log(n.notification.data);
+      }
+    })
   }
 
   public async enablePush(endpoint: PushSubscription) {
